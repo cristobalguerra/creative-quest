@@ -1995,6 +1995,19 @@ function resetIdentity(){
   location.reload();
 }
 
+function toggleFootInfo(){
+  const wrap=document.getElementById('cq-foot-expand');
+  const btn=document.getElementById('cq-foot-toggle');
+  if(!wrap||!btn)return;
+  const open=wrap.classList.toggle('is-open');
+  btn.setAttribute('aria-expanded',open?'true':'false');
+  wrap.setAttribute('aria-hidden',open?'false':'true');
+  if(open){
+    // Scroll suave para que se vea el contenido expandido
+    setTimeout(()=>{wrap.scrollIntoView({behavior:'smooth',block:'nearest'})},250);
+  }
+}
+
 // ═══════════════════════════════════════════ ADMIN — ENTREGABLES PANEL
 let ENTREGABLES={};      // cache local del snapshot
 let _entListenAttached=false;

@@ -407,43 +407,56 @@
       <img src="./assets/LOGOS2_.png" alt="Universidad de Monterrey · Centro Roberto Garza Sada · Escuela de Arte y Diseño" class="cq-foot-logo">
     </div>
 
-    <div class="cq-foot-context">
-      <span class="cq-foot-tag">Prueba de admisión 2026</span>
-      <h3 class="cq-foot-h">Escuela de Arte y Diseño</h3>
-      <p class="cq-foot-p">
-        Estás participando en una experiencia diseñada por el <strong>Centro Roberto Garza Sada</strong> de la
-        <strong>Universidad de Monterrey</strong> para identificar tu perfil creativo y orientarte hacia la
-        carrera del CRGS donde tu manera de pensar tiene mayor potencial — Arquitectura, Diseño Gráfico,
-        Diseño Industrial, Diseño de Moda, Diseño de Interiores o Animación y Efectos Digitales.
-      </p>
+    <!-- Toggle: solo se muestra el pill por default — al click expande todo -->
+    <div class="cq-foot-toggle-wrap">
+      <button type="button" class="cq-foot-tag cq-foot-toggle" id="cq-foot-toggle"
+        aria-expanded="false" aria-controls="cq-foot-expand"
+        onclick="toggleFootInfo()">
+        <span>Prueba de admisión 2026</span>
+        <svg class="cq-foot-chev" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
     </div>
 
-    <div class="cq-foot-grid">
-      <div class="cq-foot-col">
-        <div class="cq-foot-col-h">Sobre la prueba</div>
-        <p class="cq-foot-col-p">
-          90 minutos · 5 misiones · Tu universo creativo en una página. Lo que construyas durante la sesión
-          es la base que el evaluador del CRGS revisará junto contigo en tu entrevista.
-        </p>
-      </div>
+    <div class="cq-foot-expand" id="cq-foot-expand" aria-hidden="true">
+      <div class="cq-foot-expand-inner">
+        <div class="cq-foot-context">
+          <h3 class="cq-foot-h">Escuela de Arte y Diseño</h3>
+          <p class="cq-foot-p">
+            Estás participando en una experiencia diseñada por el <strong>Centro Roberto Garza Sada</strong> de la
+            <strong>Universidad de Monterrey</strong> para identificar tu perfil creativo y orientarte hacia la
+            carrera del CRGS donde tu manera de pensar tiene mayor potencial — Arquitectura, Diseño Gráfico,
+            Diseño Industrial, Diseño de Moda, Diseño de Interiores o Animación y Efectos Digitales.
+          </p>
+        </div>
 
-      <div class="cq-foot-col">
-        <div class="cq-foot-col-h">Privacidad y manejo de datos</div>
-        <p class="cq-foot-col-p">
-          Los datos que proporcionas (nombre, preparatoria, estado) y el contenido que generas en la prueba
-          se almacenan de forma confidencial y se usan <strong>únicamente</strong> con fines de evaluación
-          de admisión y orientación académica al CRGS UDEM. No se comparten con terceros.
-          Al iniciar tu prueba aceptas el tratamiento de tus datos bajo este propósito.
-        </p>
-      </div>
+        <div class="cq-foot-grid">
+          <div class="cq-foot-col">
+            <div class="cq-foot-col-h">Sobre la prueba</div>
+            <p class="cq-foot-col-p">
+              90 minutos · 5 misiones · Tu universo creativo en una página. Lo que construyas durante la sesión
+              es la base que el evaluador del CRGS revisará junto contigo en tu entrevista.
+            </p>
+          </div>
 
-      <div class="cq-foot-col">
-        <div class="cq-foot-col-h">¿Dudas o problemas técnicos?</div>
-        <p class="cq-foot-col-p">
-          Habla con tu evaluador durante la sesión, o escribe a
-          <a href="https://crgs.udem.edu.mx" target="_blank" rel="noopener">crgs.udem.edu.mx</a>.
-          Si la herramienta falla, tu progreso se guarda automáticamente — solo recarga la página.
-        </p>
+          <div class="cq-foot-col">
+            <div class="cq-foot-col-h">Privacidad y manejo de datos</div>
+            <p class="cq-foot-col-p">
+              Los datos que proporcionas (nombre, preparatoria, estado) y el contenido que generas en la prueba
+              se almacenan de forma confidencial y se usan <strong>únicamente</strong> con fines de evaluación
+              de admisión y orientación académica al CRGS UDEM. No se comparten con terceros.
+              Al iniciar tu prueba aceptas el tratamiento de tus datos bajo este propósito.
+            </p>
+          </div>
+
+          <div class="cq-foot-col">
+            <div class="cq-foot-col-h">¿Dudas o problemas técnicos?</div>
+            <p class="cq-foot-col-p">
+              Habla con tu evaluador durante la sesión, o escribe a
+              <a href="https://crgs.udem.edu.mx" target="_blank" rel="noopener">crgs.udem.edu.mx</a>.
+              Si la herramienta falla, tu progreso se guarda automáticamente — solo recarga la página.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -451,8 +464,6 @@
       <span>© Universidad de Monterrey · Centro Roberto Garza Sada</span>
       <span class="cq-foot-dot">·</span>
       <span>Prueba de admisión · Escuela de Arte y Diseño</span>
-      <span class="cq-foot-dot">·</span>
-      <span>Versión web</span>
     </div>
   </div>
 </footer>
