@@ -1,19 +1,19 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, onValue, remove, off } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, set, update, onValue, remove, off } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBaTBrxfnbYz5edT-SxsG1qGraZhlwTyxQ",
-  authDomain: "creative-quest-udem.firebaseapp.com",
-  databaseURL: "https://creative-quest-udem-default-rtdb.firebaseio.com",
-  projectId: "creative-quest-udem",
-  storageBucket: "creative-quest-udem.firebasestorage.app",
-  messagingSenderId: "8624766338",
-  appId: "1:8624766338:web:3e0e733ce75be13949639b"
+  apiKey: "AIzaSyBEAH4I5Qp2yRFrZVh1t7716ParEAUoJUo",
+  authDomain: "creative-quest-udem-381d9.firebaseapp.com",
+  databaseURL: "https://creative-quest-udem-381d9-default-rtdb.firebaseio.com",
+  projectId: "creative-quest-udem-381d9",
+  storageBucket: "creative-quest-udem-381d9.firebasestorage.app",
+  messagingSenderId: "1016652016470",
+  appId: "1:1016652016470:web:ceaa2aab592bba253c84f7"
 };
 
 const fbApp = initializeApp(firebaseConfig);
 const db = getDatabase(fbApp);
 
-window._fb = { db, ref, set, onValue, remove, off };
+window._fb = { db, ref, set, update, onValue, remove, off };
 window._fbReady = true;
 document.dispatchEvent(new Event('fb-ready'));

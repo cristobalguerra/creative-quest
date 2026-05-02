@@ -29,6 +29,43 @@
   </defs>
 </svg>
 
+<!-- ══ MODAL IDENTIDAD APLICANTE ═════════════════════════════════════ -->
+<div id="identity-modal" class="id-modal" style="display:none">
+  <div class="id-card">
+    <div class="id-brand">
+      <svg width="22" height="22" viewBox="0 0 16 16" fill="none"><polygon points="8,1 15,4.5 15,11.5 8,15 1,11.5 1,4.5" stroke="currentColor" stroke-width="1.4" fill="none"/><circle cx="8" cy="8" r="2.5" fill="currentColor"/></svg>
+      <span>CREATIVE QUEST</span>
+    </div>
+    <h1 class="id-title">Antes de empezar</h1>
+    <p class="id-sub">Necesitamos tres datos para registrar tu entregable. Tu progreso se guarda automáticamente — si cierras la pestaña por accidente, podrás regresar.</p>
+    <label class="id-lbl">Nombre completo</label>
+    <input id="id-nombre" class="fi id-input" type="text" placeholder="Ej. Ana García López" autocomplete="name" autofocus>
+    <label class="id-lbl">Preparatoria de origen</label>
+    <input id="id-prepa" class="fi id-input" type="text" placeholder="Ej. Preparatoria UDEM Valle Alto" autocomplete="organization">
+    <label class="id-lbl">Estado de origen</label>
+    <select id="id-estado" class="fi id-input">
+      <option value="">— Selecciona tu estado —</option>
+      <option>Aguascalientes</option><option>Baja California</option><option>Baja California Sur</option>
+      <option>Campeche</option><option>Chiapas</option><option>Chihuahua</option>
+      <option>Ciudad de México</option><option>Coahuila</option><option>Colima</option>
+      <option>Durango</option><option>Estado de México</option><option>Guanajuato</option>
+      <option>Guerrero</option><option>Hidalgo</option><option>Jalisco</option>
+      <option>Michoacán</option><option>Morelos</option><option>Nayarit</option>
+      <option>Nuevo León</option><option>Oaxaca</option><option>Puebla</option>
+      <option>Querétaro</option><option>Quintana Roo</option><option>San Luis Potosí</option>
+      <option>Sinaloa</option><option>Sonora</option><option>Tabasco</option>
+      <option>Tamaulipas</option><option>Tlaxcala</option><option>Veracruz</option>
+      <option>Yucatán</option><option>Zacatecas</option>
+      <option>— Otro / extranjero —</option>
+    </select>
+    <button id="id-submit" class="btn-confirm" onclick="submitIdentity()" style="margin-top:18px">
+      <span class="btn-confirm-lbl">Empezar mi prueba</span>
+      <span class="btn-confirm-arrow">→</span>
+    </button>
+    <p class="id-foot">Centro Roberto Garza Sada · Escuela de Arte, Arquitectura y Diseño · UDEM</p>
+  </div>
+</div>
+
 <div id="app">
 <div id="hud">
   <div class="logo">
@@ -143,6 +180,22 @@
   </div>
   <div class="sec-lbl">Progreso de misiones</div>
   <div class="op-grid" id="op-grid"></div>
+
+  <!-- Entrega final -->
+  <div id="entrega-wrap" style="margin-top:32px;padding:22px;border:1px solid rgba(31,174,128,.32);background:linear-gradient(180deg,rgba(31,174,128,.07) 0%,rgba(31,174,128,.02) 100%);border-radius:14px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span style="font-size:20px">🚀</span>
+      <div class="sec-lbl" style="margin:0;color:var(--cy-l)">Entregar tu prueba</div>
+    </div>
+    <p style="font-size:14px;color:rgba(240,240,255,.78);line-height:1.6;margin:0 0 14px">
+      Cuando estés satisfecho con tu universo creativo, envía tu entregable. El evaluador verá tu One-Pager completo, todas tus decisiones y tu tiempo final. <strong style="color:var(--wh)">Una vez entregado, queda registrado.</strong>
+    </p>
+    <div id="entrega-status" style="display:none;font-size:13px;color:var(--cy-l);background:rgba(31,174,128,.1);border-radius:8px;padding:10px 13px;margin-bottom:12px"></div>
+    <button id="entrega-btn" class="btn-confirm" onclick="entregarFinal()" style="background:linear-gradient(180deg, var(--cy) 0%, color-mix(in srgb, var(--cy) 78%, #000) 100%);border-color:color-mix(in srgb, var(--cy) 70%, #fff 30%);box-shadow:0 1px 0 0 rgba(255,255,255,.28) inset, 0 -1px 0 0 rgba(0,0,0,.25) inset, 0 12px 28px -10px rgba(31,174,128,.6), 0 0 0 4px rgba(31,174,128,.14)">
+      <span class="btn-confirm-lbl">Entregar mi prueba final</span>
+      <span class="btn-confirm-arrow">→</span>
+    </button>
+  </div>
 </div>
 
 <!-- ══ BREAKOUT ROOM SALA ════════════════════════════════════ -->
@@ -215,6 +268,39 @@
 
   <!-- ── PANEL EVALUADOR ── -->
   <div id="spanel-evaluador" style="display:none">
+
+    <!-- Entregables registrados — visible solo para evaluador autenticado -->
+    <div class="tool-block" style="max-width:100%;border-color:rgba(31,174,128,.32);margin-bottom:18px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
+        <span style="font-size:18px">📋</span>
+        <div class="tool-lbl" style="margin:0;color:var(--cy-l)">Entregables registrados</div>
+        <span id="entregables-count" style="font-size:12px;color:var(--gh);margin-left:auto"></span>
+      </div>
+      <p style="font-size:13px;color:var(--gh);line-height:1.55;margin:0 0 12px">
+        Lista en vivo de todos los aplicantes registrados — los entregados están listos para evaluar, los demás siguen en proceso.
+      </p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
+        <input id="entregables-search" type="text" placeholder="🔎 Buscar por nombre, prepa, estado…"
+          style="flex:1;min-width:240px;background:var(--bg3);border:1px solid var(--bd);border-radius:8px;padding:8px 12px;color:var(--wh);font-size:13px;font-family:var(--fb);margin:0"
+          oninput="renderEntregables()">
+        <select id="entregables-filter" onchange="renderEntregables()"
+          style="background:var(--bg3);border:1px solid var(--bd);border-radius:8px;padding:8px 11px;color:var(--wh);font-size:13px;font-family:var(--fb);cursor:pointer">
+          <option value="todos">Todos</option>
+          <option value="entregado">Entregados</option>
+          <option value="en_proceso">En proceso</option>
+        </select>
+        <button class="btn" onclick="downloadEntregablesCSV()" style="width:auto;padding:0 14px;margin:0;background:rgba(31,174,128,.18);border-color:rgba(31,174,128,.4);color:var(--cy-l);font-size:13px">📥 CSV</button>
+        <button class="btn" onclick="loadEntregables()" style="width:auto;padding:0 12px;margin:0;background:transparent;border-color:var(--bd);color:var(--gh);font-size:12px">↻</button>
+      </div>
+      <div id="entregables-table-wrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+        <div id="entregables-empty" style="text-align:center;padding:30px 14px;color:var(--mu);font-size:13px">Cargando entregables…</div>
+        <table id="entregables-table" class="ent-table" style="display:none"></table>
+      </div>
+    </div>
+
+    <!-- Vista detalle de un entregable -->
+    <div id="entregable-detail" style="display:none"></div>
+
     <div id="eval-join" style="display:block">
       <div class="tool-block" style="max-width:min(500px,100%)">
         <div class="tool-lbl">Crear sala y monitorear en vivo</div>

@@ -75,7 +75,15 @@ const G={
   _roomMax:6,
   _evalAuthed:false,
   rubric:{d:0,e:0,s:0,t:0,com:0},
-  rubricNotes:''
+  rubricNotes:'',
+  // ENTREGABLE / IDENTIDAD
+  identity:null,        // {nombre, prepa, estado}
+  _submissionId:null,   // slug en Firebase
+  _iniciadoTs:null,
+  _entregadoTs:null,
+  _carreraSugerida:null,
+  _carrerasSugeridas:null,
+  fraseUniverso:''
 };
 
 // ═══════════════════════════════════════════ TIMER
@@ -302,6 +310,7 @@ function confirmArch(){
   pill.style.borderColor='rgba(255,255,255,.1)';
   updateMtrack();
   setTimeout(broadcastState,300);
+  saveSubmission(true);
   goS('tablero');
 }
 
@@ -787,6 +796,7 @@ function ansReto(idx,oi){
   }
   updateMtrack();
   saveCheckpoint();
+  saveSubmission();
   renderMission(idx);
 }
 
@@ -817,6 +827,7 @@ function selDec(idx,di,oi){
   if(!G.decJust[idx])G.decJust[idx]=[null,null];
   if(G.decJust[idx]&&prev!==oi)G.decJust[idx][di]=null;
   saveCheckpoint();
+  saveSubmission();
   renderMission(idx);
 }
 
@@ -910,6 +921,7 @@ function completeMission(idx){
   updateMtrack();
   setTimeout(broadcastState,500);
   saveCheckpoint();
+  saveSubmission(true);
   const done=G.mst.filter(s=>s===3).length;
   // Unlock synthesis challenge after 3rd mission
   if(done===3&&!G.synthDone){
@@ -947,17 +959,38 @@ function renderInv(){
 }
 
 // ═══════════════════════════════════════════ ONE PAGER
-function updateCard(){renderOP();}
+function updateCard(){renderOP();saveSubmission();}
 function renderOP(){
   const a=G.arch;
   const wrap=document.getElementById('arch-card-wrap');
   if(!wrap)return;
   const frase=document.getElementById('op-frase')?.value||'';
+  G.fraseUniverso=frase;
   const done=G.mst.filter(s=>s===3).length;
   const status=document.getElementById('op-status');
   if(status){
     status.textContent=done===5?'✓ Todo completo — listo para exportar':`${done}/5 misiones completadas`;
     status.style.color=done===5?'var(--cy-l)':'var(--gh)';
+  }
+  // Estado del entregable final
+  const eStat=document.getElementById('entrega-status');
+  const eBtn=document.getElementById('entrega-btn');
+  if(eStat&&eBtn){
+    if(G._entregadoTs){
+      const d=new Date(G._entregadoTs);
+      const fecha=d.toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+      const hora=d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+      eStat.style.display='block';
+      eStat.innerHTML='✓ <strong>Entregado</strong> el '+fecha+' a las '+hora+'. El evaluador ya tiene acceso a tu prueba.';
+      eBtn.style.opacity='.5';
+      eBtn.style.pointerEvents='none';
+      eBtn.querySelector('.btn-confirm-lbl').textContent='Ya entregaste tu prueba';
+    } else {
+      eStat.style.display='none';
+      eBtn.style.opacity='';
+      eBtn.style.pointerEvents='';
+      eBtn.querySelector('.btn-confirm-lbl').textContent='Entregar mi prueba final';
+    }
   }
 
   if(!a){wrap.innerHTML='<div style="font-size:15px;color:var(--gh)">Elige tu perfil primero para ver la tarjeta.</div>';return;}
@@ -970,26 +1003,39 @@ function renderOP(){
   const domCred=credArr.reduce((a,b)=>(G.cred[b.k]||0)>(G.cred[a.k]||0)?b:a);
   const totalCred=(G.cred.v||0)+(G.cred.f||0)+(G.cred.n||0)+(G.cred.t||0);
   const mDone=G.mst.filter(s=>s===3).length;
-  // Vocational orientation based on credits + archetype + mission order
-  // Top-2 credits cross with archetype for richer vocational hint
+  // Vocational orientation — CRGS UDEM (6 carreras oficiales)
+  // Cruza arquetipo (perfil dominante visual/temperamental) con top-2 créditos
+  // (perfil de habilidad demostrado en las misiones)
   const credSorted=[...credArr].sort((a,b)=>(G.cred[b.k]||0)-(G.cred[a.k]||0));
   const top2=credSorted[0].k+'_'+credSorted[1].k;
   const archId=G.arch?G.arch.id:0;
-  const vocMap={
-    'v_f':'Diseño Gráfico · Branding · Diseño de Moda',
-    'v_n':'Narrativa Gráfica · Dirección de Arte · Ilustración Editorial',
-    'v_t':'Diseño de Producto · Diseño Industrial · Motion Design',
-    'f_v':'Diseño de Espacios · Diseño de Moda · Fotografía',
-    'f_n':'Diseño Editorial · Diseño de Comunicación · UX/UI',
-    'f_t':'Diseño Industrial · Ergonomía · Diseño de Interacción',
-    'n_v':'Animación · Dirección Creativa · Publicidad',
-    'n_f':'Comunicación Visual · Diseño Editorial · Video',
-    'n_t':'UX Writing · Diseño de Producto · Game Design',
-    't_v':'Diseño Digital · Modelado 3D · Fabricación Digital',
-    't_f':'Diseño Industrial · Arquitectura · Diseño de Sistemas',
-    't_n':'Diseño de Experiencia · Tecnología Creativa · Game Design',
+  // Top-3 carreras sugeridas por arquetipo (en orden de afinidad base)
+  const archCarreras={
+    0:['Animación y Efectos Digitales','Diseño Gráfico','Diseño Industrial'], // Gamer Futurista
+    1:['Diseño Gráfico','Diseño de Interiores','Diseño de Moda'],              // Artista Bohemio
+    2:['Diseño de Moda','Diseño Industrial','Diseño Gráfico'],                  // Deportista Urbano
+    3:['Diseño Gráfico','Diseño de Interiores','Animación y Efectos Digitales'], // Músico Indie
+    4:['Diseño Industrial','Arquitectura','Animación y Efectos Digitales']      // Tech Entrepreneur
   };
-  const vocHint=vocMap[top2]||vocMap[credSorted[0].k+'_v']||'Diseño Gráfico · Arte Digital';
+  // Reordena el top-3 según los créditos dominantes para personalizar
+  const credCarreraBoost={
+    'v':['Diseño Gráfico','Animación y Efectos Digitales','Diseño de Moda'],
+    'f':['Diseño de Interiores','Diseño Industrial','Arquitectura'],
+    'n':['Diseño Gráfico','Animación y Efectos Digitales','Diseño de Moda'],
+    't':['Diseño Industrial','Arquitectura','Animación y Efectos Digitales']
+  };
+  const baseCarr=archCarreras[archId]||archCarreras[0];
+  const boost=credCarreraBoost[domCred.k]||[];
+  // Subimos al top las carreras que están boosteadas por el crédito dominante
+  const carrerasOrdenadas=[...baseCarr].sort((a,b)=>{
+    const ai=boost.indexOf(a),bi=boost.indexOf(b);
+    return (ai===-1?99:ai)-(bi===-1?99:bi);
+  });
+  const carreraTop=carrerasOrdenadas[0];
+  const vocHint=carrerasOrdenadas.join(' · ');
+  // Guardamos para que el panel admin lo use
+  G._carreraSugerida=carreraTop;
+  G._carrerasSugeridas=carrerasOrdenadas;
 
   wrap.innerHTML=`<div class="arch-card-export" id="export-target" style="border-color:${a.hex};max-width:560px">
     <!-- HEADER -->
@@ -1144,7 +1190,7 @@ function renderOP(){
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
         ${['No admitido','Lista de espera','Admitido','Admitido con mención'].map(v=>`<button onclick="this.parentElement.querySelectorAll('button').forEach(b=>b.style.cssText='');this.style.cssText='border-color:var(--cy);background:rgba(31,174,128,.18);color:var(--cy-l);font-weight:700'" style="font-size:11px;padding:5px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.03);color:#C0C0E0;cursor:pointer;font-family:var(--fh);font-weight:600;transition:all .15s">${v}</button>`).join('')}
       </div>
-      <textarea style="width:100%;background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.12);border-radius:7px;padding:8px 10px;color:#EEEEFF;font-size:12px;font-family:var(--fb);resize:none;outline:none;min-height:50px" placeholder="Fortalezas, áreas de desarrollo, orientación vocacional específica..." oninput="G.rubricNotes=this.value">${G.rubricNotes||''}</textarea>
+      <textarea style="width:100%;background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.12);border-radius:7px;padding:8px 10px;color:#EEEEFF;font-size:12px;font-family:var(--fb);resize:none;outline:none;min-height:50px" placeholder="Fortalezas, áreas de desarrollo, orientación vocacional específica..." oninput="G.rubricNotes=this.value;saveSubmission()">${G.rubricNotes||''}</textarea>
     </div>`:``}
   </div>`;
 
@@ -1625,6 +1671,7 @@ function completeSynth(){
 // Rubric scoring
 function setRubric(key,val){
   G.rubric[key]=val;
+  saveSubmission();
   renderOP();
 }
 
@@ -1747,6 +1794,8 @@ function verifyPin(){
     _injectEvalTabs(role);
     showToast('Acceso verificado como '+(role==='coordinador'?'Coordinador':'Evaluador'),'t-ok');
     setSalaTab(role);
+    // Cargar lista de entregables (admin only)
+    setTimeout(loadEntregables,200);
   },{onlyOnce:true});
 }
 
@@ -1826,11 +1875,344 @@ async function restoreSession(){
   }
 }
 
+// ═══════════════════════════════════════════ IDENTITY + SUBMISSIONS
+const ID_KEY='cq_identity_v1';
+
+function initIdentityGate(){
+  // Si ya hay identidad guardada, la cargamos y arrancamos directo
+  try{
+    const saved=localStorage.getItem(ID_KEY);
+    if(saved){
+      G.identity=JSON.parse(saved);
+      G._submissionId=submissionSlug(G.identity);
+      G._iniciadoTs=Number(localStorage.getItem(ID_KEY+'_started'))||Date.now();
+      // Asegura que existe en Firebase (puede ser primera vez tras refresh)
+      saveSubmission(true);
+      return;
+    }
+  }catch(e){}
+  // No hay identidad → mostrar modal
+  const m=document.getElementById('identity-modal');
+  if(m)m.style.display='flex';
+}
+
+function submissionSlug(id){
+  const raw=(id.nombre+'_'+id.prepa+'_'+id.estado).toLowerCase();
+  return raw.replace(/[áàä]/g,'a').replace(/[éèë]/g,'e').replace(/[íìï]/g,'i')
+    .replace(/[óòö]/g,'o').replace(/[úùü]/g,'u').replace(/ñ/g,'n')
+    .replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,80);
+}
+
+function submitIdentity(){
+  const nombre=(document.getElementById('id-nombre').value||'').trim();
+  const prepa=(document.getElementById('id-prepa').value||'').trim();
+  const estado=(document.getElementById('id-estado').value||'').trim();
+  if(!nombre||nombre.length<3){showToast('Escribe tu nombre completo','t-warn');return;}
+  if(!prepa||prepa.length<3){showToast('Escribe tu preparatoria','t-warn');return;}
+  if(!estado){showToast('Selecciona tu estado','t-warn');return;}
+  G.identity={nombre,prepa,estado};
+  G._submissionId=submissionSlug(G.identity);
+  G._iniciadoTs=Date.now();
+  try{
+    localStorage.setItem(ID_KEY,JSON.stringify(G.identity));
+    localStorage.setItem(ID_KEY+'_started',String(G._iniciadoTs));
+  }catch(e){}
+  document.getElementById('identity-modal').style.display='none';
+  saveSubmission(true);
+  showToast('Hola '+nombre.split(' ')[0]+' — bienvenido a tu prueba','t-ok');
+}
+
+// Auto-guardado en Firebase. Se llama en checkpoints clave.
+let _saveTimer=null;
+function saveSubmission(immediate){
+  if(!G.identity||!G._submissionId)return;
+  // Debounce 800ms para no saturar la DB con cada keystroke
+  if(_saveTimer)clearTimeout(_saveTimer);
+  if(!immediate){_saveTimer=setTimeout(_doSave,800);return;}
+  _doSave();
+}
+
+function _doSave(){
+  if(!window._fb||!G.identity||!G._submissionId)return;
+  const tiempoUsado=5400-(G.secs||5400);
+  const mDone=G.mst.filter(s=>s===3).length;
+  const totalCred=(G.cred.v||0)+(G.cred.f||0)+(G.cred.n||0)+(G.cred.t||0);
+  const payload={
+    nombre:G.identity.nombre,
+    prepa:G.identity.prepa,
+    estado:G.identity.estado,
+    arquetipo:G.arch?{id:G.arch.id,name:G.arch.name,code:G.arch.code,hex:G.arch.hex,icon:G.arch.icon}:null,
+    cred:{v:G.cred.v||0,f:G.cred.f||0,n:G.cred.n||0,t:G.cred.t||0},
+    totalCreditos:totalCred,
+    misionesCompletadas:mDone,
+    mst:G.mst.slice(),
+    decSel:G.decSel,
+    decJust:G.decJust,
+    selectedPal:G.selectedPal||null,
+    sil:{gender:G.silGender,base:G.silBase,top:G.silTop,bottom:G.silBottom,shoes:G.silShoes,acc:G.silAcc,color:G.silColor},
+    selectedSpace:G.selectedSpace||null,
+    selectedEls:G.selectedEls||[],
+    selectedObjs:G.selectedObjs||[],
+    routePick:G.routePick||null,
+    animType:G.animType||null,
+    rubrica:G.rubric||null,
+    rubricaNotes:G.rubricNotes||'',
+    fraseUniverso:G.fraseUniverso||'',
+    carreraSugerida:G._carreraSugerida||null,
+    carrerasSugeridas:G._carrerasSugeridas||null,
+    sala:G.room||null,
+    iniciado:G._iniciadoTs||Date.now(),
+    actualizado:Date.now(),
+    entregado:G._entregadoTs||null,
+    tiempoUsadoSegundos:tiempoUsado,
+    estado_entrega:G._entregadoTs?'entregado':'en_proceso'
+  };
+  // Limpia undefined (Firebase no los acepta)
+  Object.keys(payload).forEach(k=>{if(payload[k]===undefined)delete payload[k];});
+  _waitFbThen(function(){
+    window._fb.update(_fbRef('submissions/'+G._submissionId),payload)
+      .catch(function(e){console.warn('saveSubmission:',e.message);});
+  });
+}
+
+function entregarFinal(){
+  if(!G.identity){showToast('Falta tu identidad','t-warn');return;}
+  const mDone=G.mst.filter(s=>s===3).length;
+  if(mDone<5){
+    if(!confirm('Aún te faltan misiones por completar ('+mDone+'/5). ¿Entregar de todas formas?'))return;
+  }
+  G._entregadoTs=Date.now();
+  G.running=false;
+  saveSubmission(true);
+  showToast('Entregable enviado · Gracias '+G.identity.nombre.split(' ')[0],'t-ok',5000);
+  // Refrescar one-pager UI
+  if(typeof renderOP==='function')renderOP();
+}
+
+function resetIdentity(){
+  if(!confirm('¿Borrar tu identidad guardada y empezar de cero? (no borra el entregable del servidor)'))return;
+  try{localStorage.removeItem(ID_KEY);localStorage.removeItem(ID_KEY+'_started');}catch(e){}
+  location.reload();
+}
+
+// ═══════════════════════════════════════════ ADMIN — ENTREGABLES PANEL
+let ENTREGABLES={};      // cache local del snapshot
+let _entListenAttached=false;
+
+function loadEntregables(){
+  if(!G._evalAuthed){return;} // protegido por PIN
+  _waitFbThen(function(){
+    if(_entListenAttached){
+      // Forzar refresh: detach + reattach
+      try{window._fb.off(_fbRef('submissions'));}catch(e){}
+      _entListenAttached=false;
+    }
+    window._fb.onValue(_fbRef('submissions'),function(snap){
+      ENTREGABLES=snap.val()||{};
+      renderEntregables();
+    });
+    _entListenAttached=true;
+  });
+}
+
+function renderEntregables(){
+  const tbl=document.getElementById('entregables-table');
+  const empty=document.getElementById('entregables-empty');
+  const count=document.getElementById('entregables-count');
+  if(!tbl||!empty)return;
+  const search=(document.getElementById('entregables-search')?.value||'').toLowerCase().trim();
+  const filter=document.getElementById('entregables-filter')?.value||'todos';
+  let rows=Object.keys(ENTREGABLES).map(id=>({id,...ENTREGABLES[id]}));
+  // Filtros
+  rows=rows.filter(r=>{
+    if(filter==='entregado'&&r.estado_entrega!=='entregado')return false;
+    if(filter==='en_proceso'&&r.estado_entrega==='entregado')return false;
+    if(search){
+      const hay=((r.nombre||'')+' '+(r.prepa||'')+' '+(r.estado||'')).toLowerCase();
+      if(!hay.includes(search))return false;
+    }
+    return true;
+  });
+  // Ordena: entregados primero por fecha de entrega desc, después en proceso por última actividad desc
+  rows.sort((a,b)=>{
+    if(a.estado_entrega!==b.estado_entrega)return a.estado_entrega==='entregado'?-1:1;
+    const ta=a.entregado||a.actualizado||0;
+    const tb=b.entregado||b.actualizado||0;
+    return tb-ta;
+  });
+  if(count){
+    const totales=Object.keys(ENTREGABLES).length;
+    const ents=Object.values(ENTREGABLES).filter(r=>r.estado_entrega==='entregado').length;
+    count.textContent=`${ents} entregados · ${totales-ents} en proceso`;
+  }
+  if(rows.length===0){
+    empty.style.display='block';
+    empty.textContent=Object.keys(ENTREGABLES).length===0?'No hay entregables aún. Los aplicantes aparecerán aquí en cuanto inicien.':'No hay resultados con ese filtro.';
+    tbl.style.display='none';
+    return;
+  }
+  empty.style.display='none';
+  tbl.style.display='table';
+  tbl.innerHTML='<thead><tr>'+
+    '<th>Aplicante</th>'+
+    '<th>Estado</th>'+
+    '<th>Tiempo</th>'+
+    '<th>Arquetipo</th>'+
+    '<th>Carrera sugerida</th>'+
+    '<th>Misiones</th>'+
+    '<th>Notas evaluador</th>'+
+    '<th></th>'+
+    '</tr></thead><tbody>'+rows.map(r=>{
+      const t=r.tiempoUsadoSegundos||0;
+      const tStr=Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
+      const arch=r.arquetipo||{};
+      const archHtml=arch.name?'<span class="ent-arch-pill" style="color:'+(arch.hex||'#fff')+';border-color:'+(arch.hex||'var(--bd)')+'40">'+(arch.icon||'')+' '+arch.name+'</span>':'<span style="color:var(--mu);font-size:11px">—</span>';
+      const stateHtml=r.estado_entrega==='entregado'?'<span class="ent-badge b-done">✓ ENTREGADO</span>':'<span class="ent-badge b-prog">⏱ EN PROCESO</span>';
+      const safeId=r.id.replace(/'/g,'&#39;');
+      return '<tr>'+
+        '<td><div class="ent-row-name">'+escHtml(r.nombre||'(sin nombre)')+'</div>'+
+          '<div class="ent-row-prepa">'+escHtml(r.prepa||'')+(r.estado?' · '+escHtml(r.estado):'')+'</div></td>'+
+        '<td>'+stateHtml+'</td>'+
+        '<td style="font-family:var(--fm);font-size:12px;color:var(--gh)">'+tStr+'</td>'+
+        '<td>'+archHtml+'</td>'+
+        '<td style="color:var(--cy-l);font-size:12px;font-weight:600">'+escHtml(r.carreraSugerida||'—')+'</td>'+
+        '<td style="font-family:var(--fm);font-weight:700;color:'+(r.misionesCompletadas===5?'var(--cy-l)':'var(--gh)')+'">'+(r.misionesCompletadas||0)+'/5</td>'+
+        '<td><textarea class="ent-notes-input" rows="2" oninput="updateEntregableNota(\''+safeId+'\',this.value)" placeholder="—">'+escHtml(r.notas||'')+'</textarea></td>'+
+        '<td><div class="ent-actions">'+
+          '<button class="ent-btn" onclick="viewEntregable(\''+safeId+'\')">Ver</button>'+
+        '</div></td>'+
+      '</tr>';
+    }).join('')+'</tbody>';
+}
+
+function escHtml(s){
+  if(s===null||s===undefined)return '';
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+let _notesTimer={};
+function updateEntregableNota(id,val){
+  if(!window._fb)return;
+  // Debounce 600ms por aplicante
+  if(_notesTimer[id])clearTimeout(_notesTimer[id]);
+  _notesTimer[id]=setTimeout(function(){
+    window._fb.update(_fbRef('submissions/'+id),{notas:val,notasActualizado:Date.now()})
+      .catch(function(e){console.warn('updateNota:',e.message);});
+  },600);
+}
+
+function viewEntregable(id){
+  const r=ENTREGABLES[id];
+  if(!r){showToast('Entregable no encontrado','t-warn');return;}
+  const wrap=document.getElementById('entregable-detail');
+  if(!wrap)return;
+  const arch=r.arquetipo||{};
+  const cred=r.cred||{v:0,f:0,n:0,t:0};
+  const totalCred=(cred.v||0)+(cred.f||0)+(cred.n||0)+(cred.t||0);
+  const t=r.tiempoUsadoSegundos||0;
+  const tStr=Math.floor(t/60)+' min '+(t%60)+' s';
+  const dec=r.decJust||[];
+  const decHtml=Array.isArray(dec)?dec.map((arr,mi)=>{
+    if(!Array.isArray(arr))return '';
+    const ms=MISSIONS[mi]?MISSIONS[mi].name:'Misión '+(mi+1);
+    const lines=arr.filter(j=>j).map(j=>'<div style="font-size:13px;color:#DDDDEE;line-height:1.5;margin-bottom:5px">— '+escHtml(j)+'</div>').join('');
+    return lines?'<div style="margin-bottom:14px"><div style="font-family:var(--fh);font-size:11px;font-weight:700;color:'+(arch.hex||'#fff')+';margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">'+escHtml(ms)+'</div>'+lines+'</div>':'';
+  }).join(''):'';
+  const carreras=Array.isArray(r.carrerasSugeridas)?r.carrerasSugeridas:(r.carreraSugerida?[r.carreraSugerida]:[]);
+  const rubrica=r.rubrica||{};
+  const score=Math.round((rubrica.d||0)*25+(rubrica.e||0)*25+(rubrica.s||0)*20+(rubrica.t||0)*20+(rubrica.com||0)*10);
+  wrap.style.display='block';
+  wrap.innerHTML='<div class="tool-block" style="border-color:'+(arch.hex||'var(--bd)')+'66;margin-top:14px">'+
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;gap:12px;flex-wrap:wrap">'+
+      '<div>'+
+        '<div style="font-family:var(--fh);font-size:22px;font-weight:600;color:var(--wh);margin-bottom:4px">'+escHtml(r.nombre||'(sin nombre)')+'</div>'+
+        '<div style="font-size:12px;color:var(--gh)">'+escHtml(r.prepa||'')+(r.estado?' · '+escHtml(r.estado):'')+'</div>'+
+      '</div>'+
+      '<button onclick="document.getElementById(\'entregable-detail\').style.display=\'none\'" style="background:transparent;border:.5px solid var(--bd);color:var(--gh);padding:5px 12px;border-radius:6px;cursor:pointer;font-size:12px">Cerrar</button>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">'+
+      '<div style="background:var(--bg3);border:.5px solid var(--bd);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--gh);text-transform:uppercase;letter-spacing:.06em;font-family:var(--fh);font-weight:700;margin-bottom:3px">Arquetipo</div><div style="font-size:14px;font-weight:700;color:'+(arch.hex||'#fff')+'">'+(arch.icon||'')+' '+escHtml(arch.name||'—')+'</div></div>'+
+      '<div style="background:var(--bg3);border:.5px solid var(--bd);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--gh);text-transform:uppercase;letter-spacing:.06em;font-family:var(--fh);font-weight:700;margin-bottom:3px">Estado</div><div style="font-size:14px;font-weight:700;color:'+(r.estado_entrega==='entregado'?'var(--cy-l)':'var(--go-l)')+'">'+(r.estado_entrega==='entregado'?'✓ Entregado':'⏱ En proceso')+'</div></div>'+
+      '<div style="background:var(--bg3);border:.5px solid var(--bd);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--gh);text-transform:uppercase;letter-spacing:.06em;font-family:var(--fh);font-weight:700;margin-bottom:3px">Tiempo usado</div><div style="font-size:14px;font-weight:700;color:var(--wh);font-family:var(--fm)">'+tStr+'</div></div>'+
+      '<div style="background:var(--bg3);border:.5px solid var(--bd);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--gh);text-transform:uppercase;letter-spacing:.06em;font-family:var(--fh);font-weight:700;margin-bottom:3px">Misiones</div><div style="font-size:14px;font-weight:700;color:'+(r.misionesCompletadas===5?'var(--cy-l)':'var(--wh)')+'">'+(r.misionesCompletadas||0)+'/5</div></div>'+
+    '</div>'+
+    '<div style="background:rgba(139,127,232,.06);border:.5px solid rgba(139,127,232,.25);border-radius:8px;padding:12px;margin-bottom:14px">'+
+      '<div style="font-size:10px;color:var(--gh);text-transform:uppercase;letter-spacing:.06em;font-family:var(--fh);font-weight:700;margin-bottom:6px">Carrera sugerida</div>'+
+      '<div style="font-size:15px;font-weight:700;color:var(--pu-l);margin-bottom:4px">'+escHtml(carreras[0]||'—')+'</div>'+
+      (carreras.length>1?'<div style="font-size:12px;color:var(--gh)">Otras: '+carreras.slice(1).map(escHtml).join(' · ')+'</div>':'')+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px">'+
+      '<div style="background:var(--bg3);border-radius:7px;padding:9px;text-align:center"><div style="font-size:10px;color:var(--pu-l);font-family:var(--fh);font-weight:700">VISIÓN</div><div style="font-size:18px;font-weight:700;color:var(--wh)">'+(cred.v||0)+'</div></div>'+
+      '<div style="background:var(--bg3);border-radius:7px;padding:9px;text-align:center"><div style="font-size:10px;color:var(--cy-l);font-family:var(--fh);font-weight:700">FORMA</div><div style="font-size:18px;font-weight:700;color:var(--wh)">'+(cred.f||0)+'</div></div>'+
+      '<div style="background:var(--bg3);border-radius:7px;padding:9px;text-align:center"><div style="font-size:10px;color:var(--go-l);font-family:var(--fh);font-weight:700">NARRAT.</div><div style="font-size:18px;font-weight:700;color:var(--wh)">'+(cred.n||0)+'</div></div>'+
+      '<div style="background:var(--bg3);border-radius:7px;padding:9px;text-align:center"><div style="font-size:10px;color:var(--gr-l);font-family:var(--fh);font-weight:700">TÉCNICA</div><div style="font-size:18px;font-weight:700;color:var(--wh)">'+(cred.t||0)+'</div></div>'+
+    '</div>'+
+    (score>0?'<div style="background:rgba(31,174,128,.06);border:.5px solid rgba(31,174,128,.22);border-radius:8px;padding:11px;margin-bottom:14px;font-size:13px;color:var(--cy-l)"><strong>Puntaje rúbrica:</strong> '+score+'/400</div>':'')+
+    (r.fraseUniverso?'<div style="background:var(--bg3);border-left:3px solid '+(arch.hex||'var(--pu)')+';padding:11px 14px;border-radius:6px;margin-bottom:14px;font-style:italic;color:#DDDDEE;font-size:14px;line-height:1.5">"'+escHtml(r.fraseUniverso)+'"</div>':'')+
+    (decHtml?'<div style="margin-bottom:14px"><div class="sec-lbl" style="margin-bottom:10px">Razonamiento creativo del aplicante</div>'+decHtml+'</div>':'')+
+    '<div><div class="sec-lbl" style="margin-bottom:6px">Notas del evaluador</div>'+
+      '<textarea class="ent-notes-input" rows="3" style="min-height:70px" oninput="updateEntregableNota(\''+id.replace(/'/g,"&#39;")+'\',this.value)" placeholder="Fortalezas, dudas, justificación del veredicto…">'+escHtml(r.notas||'')+'</textarea>'+
+    '</div>'+
+  '</div>';
+  wrap.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ═══════════════════════════════════════════ EXPORT CSV
+function downloadEntregablesCSV(){
+  if(Object.keys(ENTREGABLES).length===0){showToast('No hay datos para exportar','t-warn');return;}
+  const headers=['Nombre','Prepa','Estado','Arquetipo','Carrera sugerida','Otras carreras','Misiones (n/5)','Visión','Forma','Narrativa','Técnica','Total créditos','Tiempo (min:seg)','Estado entrega','Fecha inicio','Fecha entrega','Frase universo','Puntaje rúbrica','Notas evaluador'];
+  const rows=Object.values(ENTREGABLES).map(r=>{
+    const arch=r.arquetipo||{};
+    const cred=r.cred||{};
+    const t=r.tiempoUsadoSegundos||0;
+    const tStr=Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
+    const carreras=Array.isArray(r.carrerasSugeridas)?r.carrerasSugeridas:[];
+    const fInicio=r.iniciado?new Date(r.iniciado).toLocaleString('es-MX'):'';
+    const fEntrega=r.entregado?new Date(r.entregado).toLocaleString('es-MX'):'';
+    const rubrica=r.rubrica||{};
+    const score=Math.round((rubrica.d||0)*25+(rubrica.e||0)*25+(rubrica.s||0)*20+(rubrica.t||0)*20+(rubrica.com||0)*10);
+    return [
+      r.nombre||'',r.prepa||'',r.estado||'',
+      arch.name||'',
+      r.carreraSugerida||'',
+      carreras.slice(1).join(' / '),
+      (r.misionesCompletadas||0)+'/5',
+      cred.v||0,cred.f||0,cred.n||0,cred.t||0,
+      r.totalCreditos||0,
+      tStr,
+      r.estado_entrega||'',
+      fInicio,fEntrega,
+      r.fraseUniverso||'',
+      score||'',
+      r.notas||''
+    ];
+  });
+  const csv=[headers,...rows].map(row=>
+    row.map(cell=>{
+      const s=String(cell==null?'':cell);
+      if(/[",\n;]/.test(s))return '"'+s.replace(/"/g,'""')+'"';
+      return s;
+    }).join(',')
+  ).join('\n');
+  // BOM para Excel UTF-8
+  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  const fecha=new Date().toISOString().slice(0,10);
+  a.download='creative-quest-entregables-'+fecha+'.csv';
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},100);
+  showToast('CSV descargado · '+rows.length+' aplicantes','t-ok');
+}
+
 // Initial UI build — wait for data to arrive
 DATA_READY.then(()=>{
   buildSlider();
   syncC();
   updateMtrack();
+  // Identity gate — bloquea la app hasta capturar nombre+prepa+estado
+  initIdentityGate();
 }).catch(err=>{
   console.error('Failed to load data:', err);
   document.body.insertAdjacentHTML('afterbegin',
