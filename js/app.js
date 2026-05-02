@@ -1779,8 +1779,10 @@ function copyPin(){
 // Útil para pruebas internas. Comentar/cambiar en producción si se quiere obligar a usar códigos.
 var STUDENT_ACCESS_PASS='CY8V';
 
-// Contraseña maestra del coordinador del CRGS. Define la cuando estés listo.
-var MASTER_PASS_EVAL=null; // ej. 'CRGS2026'
+// Contraseña maestra del coordinador del CRGS. Da acceso completo al panel.
+// Compártela SOLO con el director del CRGS — desde aquí se generan los PINs
+// de evaluador y los códigos de equipo.
+var MASTER_PASS_EVAL='crgs-coord';
 
 function verifyPin(){
   var input=document.getElementById('pin-input');
