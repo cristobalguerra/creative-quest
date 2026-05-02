@@ -97,7 +97,12 @@ setInterval(()=>{
 },1000);
 
 // ═══════════════════════════════════════════ CREDITS
-function gain(obj){Object.keys(obj).forEach(k=>{G.cred[k]=(G.cred[k]||0)+(obj[k]||0);});syncC();}
+function gain(obj){
+  const total=Object.values(obj).reduce((a,b)=>a+b,0);
+  Object.keys(obj).forEach(k=>{G.cred[k]=(G.cred[k]||0)+(obj[k]||0);});
+  syncC();
+  if(total>0&&typeof SFX!=='undefined')SFX.success();
+}
 function spendC(obj){Object.keys(obj).forEach(k=>{G.cred[k]=Math.max(0,(G.cred[k]||0)-(obj[k]||0));});syncC();}
 function syncC(){
   const MAX=20; // Increased to accommodate all possible credits
@@ -922,6 +927,7 @@ function completeMission(idx){
   setTimeout(broadcastState,500);
   saveCheckpoint();
   saveSubmission(true);
+  if(typeof SFX!=='undefined')SFX.win();
   const done=G.mst.filter(s=>s===3).length;
   // Unlock synthesis challenge after 3rd mission
   if(done===3&&!G.synthDone){
@@ -1875,6 +1881,161 @@ async function restoreSession(){
   }
 }
 
+// ═══════════════════════════════════════════ SFX ENGINE — Web Audio API
+// Sonidos generados en código tipo Apple Vision Pro / Discord / TikTok
+const SFX={
+  ctx:null,
+  muted:false,
+  master:0.5,
+  _initd:false,
+
+  _init(){
+    if(this._initd)return;
+    try{
+      const AC=window.AudioContext||window.webkitAudioContext;
+      if(!AC)return;
+      this.ctx=new AC();
+      this._initd=true;
+    }catch(e){console.warn('SFX init failed',e);}
+    // Cargar preferencia del usuario
+    try{const m=localStorage.getItem('cq_sfx_muted');if(m==='1')this.muted=true;}catch(e){}
+    this._updateUI();
+  },
+
+  _resume(){
+    if(this.ctx&&this.ctx.state==='suspended')this.ctx.resume();
+  },
+
+  _updateUI(){
+    const btn=document.getElementById('sfx-toggle');
+    const on=document.getElementById('sfx-on');
+    const off=document.getElementById('sfx-off');
+    if(!btn)return;
+    btn.classList.toggle('muted',this.muted);
+    if(on)on.style.display=this.muted?'none':'';
+    if(off)off.style.display=this.muted?'':'none';
+  },
+
+  toggle(){
+    this._init();
+    this.muted=!this.muted;
+    try{localStorage.setItem('cq_sfx_muted',this.muted?'1':'0');}catch(e){}
+    this._updateUI();
+    if(!this.muted){this._resume();this.pop();}
+  },
+
+  // Tono base
+  _tone({freq=800,end=null,dur=0.08,type='sine',vol=0.15,attack=0.005,delay=0,sweep=null}){
+    if(this.muted||!this.ctx)return;
+    this._resume();
+    const t=this.ctx.currentTime+delay;
+    const osc=this.ctx.createOscillator();
+    const gain=this.ctx.createGain();
+    osc.type=type;
+    osc.frequency.setValueAtTime(freq,t);
+    if(end!==null)osc.frequency.exponentialRampToValueAtTime(Math.max(20,end),t+dur);
+    gain.gain.setValueAtTime(0,t);
+    gain.gain.linearRampToValueAtTime(vol*this.master,t+attack);
+    gain.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(t);
+    osc.stop(t+dur+0.05);
+  },
+
+  // Ruido blanco filtrado para whoosh / transiciones
+  _noise({dur=0.12,vol=0.04,filterFreq=1500,sweep=null}){
+    if(this.muted||!this.ctx)return;
+    this._resume();
+    const t=this.ctx.currentTime;
+    const buf=this.ctx.createBuffer(1,this.ctx.sampleRate*dur,this.ctx.sampleRate);
+    const data=buf.getChannelData(0);
+    for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1);
+    const src=this.ctx.createBufferSource();
+    src.buffer=buf;
+    const filter=this.ctx.createBiquadFilter();
+    filter.type='bandpass';
+    filter.frequency.setValueAtTime(filterFreq,t);
+    if(sweep)filter.frequency.exponentialRampToValueAtTime(sweep,t+dur);
+    filter.Q.setValueAtTime(2,t);
+    const gain=this.ctx.createGain();
+    gain.gain.setValueAtTime(0,t);
+    gain.gain.linearRampToValueAtTime(vol*this.master,t+0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    src.connect(filter);filter.connect(gain);gain.connect(this.ctx.destination);
+    src.start(t);src.stop(t+dur);
+  },
+
+  // ─── Biblioteca de sonidos ───────────────────────────────────────────
+  // Tap suave — para nav buttons
+  tap(){this._tone({freq:1400,end:1100,dur:0.05,type:'triangle',vol:0.12});},
+  // Pop — para selección/expansión, toggles
+  pop(){this._tone({freq:600,end:900,dur:0.07,type:'sine',vol:0.14});},
+  // Click — confirm/CTA primario
+  click(){
+    this._tone({freq:1200,end:800,dur:0.04,type:'triangle',vol:0.10});
+    this._tone({freq:400,dur:0.06,type:'sine',vol:0.08,delay:0.005});
+  },
+  // Success — gain de crédito (campanita corta)
+  success(){
+    this._tone({freq:880,dur:0.08,type:'sine',vol:0.12});
+    this._tone({freq:1318.51,dur:0.18,type:'sine',vol:0.10,delay:0.04}); // E6
+  },
+  // Win — misión completa (acorde mayor ascendente)
+  win(){
+    const notes=[523.25,659.25,783.99,1046.5]; // C5 E5 G5 C6
+    notes.forEach((f,i)=>this._tone({freq:f,dur:0.4,type:'sine',vol:0.11,delay:i*0.06}));
+  },
+  // Star — entrega final (más glamuroso)
+  star(){
+    this._tone({freq:1046.5,dur:0.12,type:'triangle',vol:0.11});
+    this._tone({freq:1318.51,dur:0.14,type:'triangle',vol:0.10,delay:0.07});
+    this._tone({freq:1567.98,dur:0.4,type:'sine',vol:0.09,delay:0.14});
+    this._noise({dur:0.6,vol:0.025,filterFreq:3000,sweep:8000});
+  },
+  // Error — input inválido
+  err(){
+    this._tone({freq:300,end:180,dur:0.18,type:'square',vol:0.07});
+  },
+  // Whoosh — transición de página
+  whoosh(){
+    this._noise({dur:0.18,vol:0.05,filterFreq:1200,sweep:3500});
+  },
+  // Toggle — switch on/off, expand/collapse footer
+  toggleSnd(){this._tone({freq:520,end:780,dur:0.06,type:'triangle',vol:0.11});},
+  // Lock — algo bloqueado (clic en misión locked)
+  lock(){this._tone({freq:200,end:140,dur:0.10,type:'square',vol:0.06});}
+};
+
+// API pública para usar en HTML/eventos
+function toggleSFX(){SFX.toggle();}
+
+// Inicializa al primer interacción del usuario (autoplay policy)
+function _initSFXOnFirstClick(){
+  SFX._init();
+  document.removeEventListener('click',_initSFXOnFirstClick,true);
+  document.removeEventListener('touchstart',_initSFXOnFirstClick,true);
+}
+document.addEventListener('click',_initSFXOnFirstClick,true);
+document.addEventListener('touchstart',_initSFXOnFirstClick,true);
+
+// Delegación global para sonidos automáticos por tipo de elemento
+document.addEventListener('click',function(e){
+  const target=e.target.closest('button,[onclick],[role=button]');
+  if(!target)return;
+  // Evitar doble-disparo si la función ya tocó un sonido específico
+  if(target.classList.contains('nb'))return SFX.tap();
+  if(target.classList.contains('sarr'))return SFX.pop();
+  if(target.classList.contains('btn-confirm'))return SFX.click();
+  if(target.classList.contains('cq-foot-toggle'))return SFX.toggleSnd();
+  if(target.classList.contains('ac-toggle'))return SFX.pop();
+  if(target.classList.contains('sfx-toggle'))return; // ya maneja toggle()
+  if(target.classList.contains('mcard')&&!target.classList.contains('mlk'))return SFX.pop();
+  if(target.classList.contains('mcard')&&target.classList.contains('mlk'))return SFX.lock();
+  if(target.classList.contains('ent-btn'))return SFX.tap();
+  if(target.classList.contains('btn'))return SFX.tap();
+});
+
 // ═══════════════════════════════════════════ IDENTITY + SUBMISSIONS
 const ID_KEY='cq_identity_v1';
 
@@ -1919,6 +2080,7 @@ function submitIdentity(){
   }catch(e){}
   document.getElementById('identity-modal').style.display='none';
   saveSubmission(true);
+  if(typeof SFX!=='undefined'){SFX._init();SFX.success();}
   showToast('Hola '+nombre.split(' ')[0]+' — bienvenido a tu prueba','t-ok');
 }
 
@@ -1984,6 +2146,7 @@ function entregarFinal(){
   G._entregadoTs=Date.now();
   G.running=false;
   saveSubmission(true);
+  if(typeof SFX!=='undefined')SFX.star();
   showToast('Entregable enviado · Gracias '+G.identity.nombre.split(' ')[0],'t-ok',5000);
   // Refrescar one-pager UI
   if(typeof renderOP==='function')renderOP();

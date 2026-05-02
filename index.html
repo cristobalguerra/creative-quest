@@ -84,6 +84,10 @@
   </div>
   <div id="arch-pill" class="arch-pill"></div>
   <div class="timer-wrap"><div class="timer" id="timer" style="color:var(--cy-l)">90:00</div></div>
+  <button id="sfx-toggle" class="sfx-toggle" onclick="toggleSFX()" title="Activar/silenciar sonidos" aria-label="Sonido">
+    <svg id="sfx-on" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+    <svg id="sfx-off" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg>
+  </button>
 </div>
 <div id="mtrack">
   <div class="mn locked" id="mn0" onclick="jumpM(0)" title="Tu Identidad"><span class="mn-num">1</span><span class="mn-ico">🎨</span></div><div class="mn-line"></div>
