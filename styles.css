@@ -824,6 +824,7 @@ select.id-input{cursor:pointer;appearance:none;-webkit-appearance:none;
   perspective:600px;
   perspective-origin:50% 50%;
   transform-style:preserve-3d;
+  overflow:visible; /* permite que la animación 3D respire sin que se corte */
 }
 .ac-char-img{
   width:100%;
@@ -1160,17 +1161,21 @@ select.id-input{cursor:pointer;appearance:none;-webkit-appearance:none;
 
 /* RESPONSIVE */
 @media(max-width:768px){
-  .ac-character{grid-template-columns:180px 1fr;gap:24px;padding:24px 22px}
-  .ac-char-stage{width:180px}
-  .ac-name{font-size:34px}
+  .ac-character{grid-template-columns:140px 1fr;gap:16px;padding:18px 18px}
+  .ac-char-stage{width:140px}
+  .ac-name{font-size:26px}
   .ac-meta{grid-template-columns:1fr;gap:14px;padding:16px 20px}
   .ac-details{grid-template-columns:1fr;gap:24px}
 }
 @media(max-width:480px){
-  .ac-character{grid-template-columns:1fr;gap:18px;padding:24px 16px;text-align:left}
-  .ac-char-stage{width:140px;justify-self:start}
-  .ac-name{font-size:28px}
-  .ac-tab{padding:10px 16px;font-size:10px}
+  /* Mantener grid de 2 columnas en móvil — imagen al mínimo legible */
+  .ac-character{grid-template-columns:100px 1fr;gap:12px;padding:14px 14px;align-items:center;text-align:left}
+  .ac-char-stage{width:100px;justify-self:start}
+  .ac-name{font-size:22px;line-height:1.05}
+  .ac-vibe{font-size:13px;line-height:1.55}
+  .ac-tag{font-size:10px;padding:3px 7px}
+  .ac-char-label{font-size:10px}
+  .ac-tab{padding:9px 14px;font-size:9px}
   .ac-meta{padding:14px 16px}
   .ac-toggle{padding:14px 16px}
   .ac-details{padding:18px 16px}
@@ -1179,6 +1184,12 @@ select.id-input{cursor:pointer;appearance:none;-webkit-appearance:none;
   .ac-cred-num{font-size:16px}
   .sarr{font-size:10px}
   .sl-ctrl{margin:18px 0 14px}
+}
+/* Pantallas muy chicas (<360px) — todavía más compacto */
+@media(max-width:360px){
+  .ac-character{grid-template-columns:84px 1fr;gap:10px;padding:12px}
+  .ac-char-stage{width:84px}
+  .ac-name{font-size:19px}
 }
 
 /* ───────────────────────────────────────────────────────────── TABLERO */
