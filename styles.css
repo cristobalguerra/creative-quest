@@ -549,13 +549,23 @@ html,body{height:100%;background:var(--bg0);color:var(--wh);font-family:var(--fb
 .ac-num{color:rgba(255,255,255,.7)}
 .ac-code{color:var(--ax,var(--wh));font-weight:700;letter-spacing:.3em}
 .ac-emoji{
-  font-size:30px;
-  letter-spacing:0;
+  /* Sticker tipo badge: círculo del color del arquetipo con el emoji a color encima */
+  width:46px;
+  height:46px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
   line-height:1;
-  /* Sticker silhouette: aplana el emoji a blanco puro */
-  filter:brightness(0) invert(1) drop-shadow(0 1px 0 rgba(0,0,0,.4)) drop-shadow(0 0 6px color-mix(in srgb, var(--ax,#fff) 55%, transparent));
-  -webkit-filter:brightness(0) invert(1) drop-shadow(0 1px 0 rgba(0,0,0,.4)) drop-shadow(0 0 6px color-mix(in srgb, var(--ax,#fff) 55%, transparent));
-  display:inline-block;
+  letter-spacing:0;
+  border-radius:50%;
+  background:radial-gradient(circle at 32% 26%, color-mix(in srgb, var(--ax,#8B7FE8) 65%, #fff 35%) 0%, var(--ax,#8B7FE8) 60%, color-mix(in srgb, var(--ax,#8B7FE8) 75%, #000 25%) 100%);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,.45) inset,
+    0 -2px 4px rgba(0,0,0,.2) inset,
+    0 6px 14px -4px color-mix(in srgb, var(--ax,#8B7FE8) 65%, transparent),
+    0 0 0 2px color-mix(in srgb, var(--ax,#8B7FE8) 18%, transparent);
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.3));
   transform:translateY(-1px);
 }
 
