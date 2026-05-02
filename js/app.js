@@ -2065,6 +2065,12 @@ document.addEventListener('click',function(e){
 const ID_KEY='cq_identity_v1';
 
 function initIdentityGate(){
+  // Modo admin por URL (?admin) — salta el modal y abre la pantalla de Sala
+  const params=new URLSearchParams(location.search);
+  if(params.has('admin')||params.has('coord')||params.has('evaluador')){
+    enterAsAdmin();
+    return;
+  }
   // Si ya hay identidad guardada, la cargamos y arrancamos directo
   try{
     const saved=localStorage.getItem(ID_KEY);
@@ -2080,6 +2086,24 @@ function initIdentityGate(){
   // No hay identidad → mostrar modal
   const m=document.getElementById('identity-modal');
   if(m)m.style.display='flex';
+}
+
+// Entra como evaluador/coordinador — salta el modal del aplicante
+function enterAsAdmin(){
+  // Cierra el modal de identidad
+  const m=document.getElementById('identity-modal');
+  if(m)m.style.display='none';
+  // Marca una identidad de admin (no es un alumno, no escribe a submissions)
+  G.identity=null;
+  G._submissionId=null;
+  // Va directo a Sala con el PIN gate visible
+  goS('sala');
+  setTimeout(()=>{
+    const gate=document.getElementById('pin-gate');
+    const input=document.getElementById('pin-input');
+    if(gate)gate.style.display='block';
+    if(input){input.focus();input.value='';}
+  },200);
 }
 
 function submissionSlug(id){

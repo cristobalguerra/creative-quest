@@ -430,6 +430,21 @@ select.id-input{cursor:pointer;appearance:none;-webkit-appearance:none;
   margin:18px 0 0;
 }
 .id-privacy strong{color:rgba(240,240,255,.85);font-weight:600}
+.id-admin-link{
+  display:block;width:100%;
+  background:transparent;border:none;
+  color:rgba(196,188,255,.55);
+  font-family:var(--fb);font-size:12px;
+  text-align:center;
+  cursor:pointer;
+  margin:14px 0 0;padding:6px;
+  border-radius:6px;
+  transition:color .2s, background .2s;
+}
+.id-admin-link:hover{
+  color:var(--pu-l);
+  background:rgba(139,127,232,.08);
+}
 .id-foot{
   font-size:11px;color:rgba(255,255,255,.32);
   text-align:center;margin:18px 0 0;letter-spacing:.02em;
