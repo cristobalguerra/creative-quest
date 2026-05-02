@@ -1775,8 +1775,8 @@ function copyPin(){
   }).catch(function(){showToast('PIN: '+pin,'t-ok',5000);});
 }
 
-// Contraseña fija para que los aplicantes accedan a la prueba.
-// Solo personas con esta contraseña pueden iniciar la prueba.
+// Contraseña backdoor por si la sesión necesita un acceso rápido sin código de sala.
+// Útil para pruebas internas. Comentar/cambiar en producción si se quiere obligar a usar códigos.
 var STUDENT_ACCESS_PASS='CY8V';
 
 // Contraseña maestra del coordinador del CRGS. Define la cuando estés listo.
@@ -2088,20 +2088,51 @@ function submissionSlug(id){
 }
 
 function submitIdentity(){
-  const pass=(document.getElementById('id-pass')?.value||'').trim();
+  const pass=(document.getElementById('id-pass')?.value||'').trim().toUpperCase();
   const nombre=(document.getElementById('id-nombre').value||'').trim();
   const prepa=(document.getElementById('id-prepa').value||'').trim();
   const estado=(document.getElementById('id-estado').value||'').trim();
-  if(!pass||pass.toUpperCase()!==STUDENT_ACCESS_PASS.toUpperCase()){
-    showToast('Contraseña incorrecta — pídela al evaluador','t-warn',3500);
-    const el=document.getElementById('id-pass');
-    if(el){el.style.borderColor='var(--co)';setTimeout(()=>{el.style.borderColor=''},1800);el.focus();}
-    if(typeof SFX!=='undefined')SFX.err();
-    return;
+  if(!pass){
+    _idPassErr('Escribe el código de equipo');return;
   }
   if(!nombre||nombre.length<3){showToast('Escribe tu nombre completo','t-warn');return;}
   if(!prepa||prepa.length<3){showToast('Escribe tu preparatoria','t-warn');return;}
   if(!estado){showToast('Selecciona tu estado','t-warn');return;}
+
+  // Backdoor de prueba — accept STUDENT_ACCESS_PASS sin validar Firebase
+  if(STUDENT_ACCESS_PASS&&pass===STUDENT_ACCESS_PASS.toUpperCase()){
+    _completeIdentity(nombre,prepa,estado,null);return;
+  }
+
+  // Validar contra una sala existente en Firebase
+  if(pass.length!==4){
+    _idPassErr('El código de equipo debe ser de 4 caracteres');return;
+  }
+  if(!window._fb){_idPassErr('Sin conexión — verifica tu internet');return;}
+  // Mostrar feedback "verificando"
+  const btn=document.getElementById('id-submit');
+  if(btn){btn.style.opacity='.6';btn.style.pointerEvents='none';btn.querySelector('.btn-confirm-lbl').textContent='Verificando código…';}
+  _waitFbThen(function(){
+    window._fb.onValue(_fbRef('salas/'+pass+'/meta'),function(snap){
+      window._fb.off(_fbRef('salas/'+pass+'/meta'));
+      const meta=snap.val();
+      if(btn){btn.style.opacity='';btn.style.pointerEvents='';btn.querySelector('.btn-confirm-lbl').textContent='Empezar mi prueba';}
+      if(!meta){
+        _idPassErr('Código no válido — verifícalo con tu evaluador');return;
+      }
+      _completeIdentity(nombre,prepa,estado,pass);
+    },{onlyOnce:true});
+  });
+}
+
+function _idPassErr(msg){
+  showToast(msg,'t-warn',3500);
+  const el=document.getElementById('id-pass');
+  if(el){el.style.borderColor='var(--co)';setTimeout(()=>{el.style.borderColor=''},1800);el.focus();}
+  if(typeof SFX!=='undefined')SFX.err();
+}
+
+function _completeIdentity(nombre,prepa,estado,salaCode){
   G.identity={nombre,prepa,estado};
   G._submissionId=submissionSlug(G.identity);
   G._iniciadoTs=Date.now();
@@ -2110,9 +2141,15 @@ function submitIdentity(){
     localStorage.setItem(ID_KEY+'_started',String(G._iniciadoTs));
   }catch(e){}
   document.getElementById('identity-modal').style.display='none';
+  // Si viene con código de sala válido, conectarlo al sistema de salas en vivo
+  if(salaCode&&window._fb){
+    G.room=salaCode;G.roomName=nombre;G.roomRole='player';
+    _attachRoomListener(salaCode);
+    setTimeout(broadcastState,300);
+  }
   saveSubmission(true);
   if(typeof SFX!=='undefined'){SFX._init();SFX.success();}
-  showToast('Hola '+nombre.split(' ')[0]+' — bienvenido a tu prueba','t-ok');
+  showToast('Hola '+nombre.split(' ')[0]+(salaCode?' — equipo '+salaCode:'')+' · bienvenido a tu prueba','t-ok',4000);
 }
 
 // Auto-guardado en Firebase. Se llama en checkpoints clave.

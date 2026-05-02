@@ -38,9 +38,10 @@
     </div>
     <h1 class="id-title">Antes de empezar</h1>
     <p class="id-sub">Necesitamos cuatro datos para registrar tu entregable. Tu progreso se guarda automáticamente — si cierras la pestaña por accidente, podrás regresar.</p>
-    <label class="id-lbl">Contraseña de acceso</label>
-    <input id="id-pass" class="fi id-input" type="text" placeholder="Te la dio el evaluador del CRGS"
-      style="text-transform:uppercase;letter-spacing:.1em" autocomplete="off" autofocus>
+    <label class="id-lbl">Código de equipo</label>
+    <input id="id-pass" class="fi id-input" type="text" placeholder="Ej. VV7W (te lo dio tu evaluador)"
+      maxlength="4" style="text-transform:uppercase;letter-spacing:.3em;font-family:var(--fm);font-size:18px;text-align:center" autocomplete="off" autofocus
+      oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
     <label class="id-lbl">Nombre completo</label>
     <input id="id-nombre" class="fi id-input" type="text" placeholder="Ej. Ana García López" autocomplete="name">
     <label class="id-lbl">Preparatoria de origen</label>
