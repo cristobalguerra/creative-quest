@@ -1,0 +1,66 @@
+{
+  "spaces": [
+    {
+      "id": "sp1",
+      "name": "Studio Gaming",
+      "vibe": "Oscuro · Tech · Pantallas",
+      "emoji": "🖥",
+      "url": "https://images.unsplash.com/photo-1593640495253-23196b27a87f?w=400&h=200&fit=crop&auto=format"
+    },
+    {
+      "id": "sp2",
+      "name": "Taller Artístico",
+      "vibe": "Cálido · Textura · Creativo",
+      "emoji": "🎨",
+      "url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&h=200&fit=crop&auto=format"
+    },
+    {
+      "id": "sp3",
+      "name": "Gym Urbano",
+      "vibe": "Funcional · Bold · Energía",
+      "emoji": "🏋️",
+      "url": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=200&fit=crop&auto=format"
+    },
+    {
+      "id": "sp4",
+      "name": "Estudio de Música",
+      "vibe": "Íntimo · Acústico · Atmosférico",
+      "emoji": "🎵",
+      "url": "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=400&h=200&fit=crop&auto=format"
+    },
+    {
+      "id": "sp5",
+      "name": "Oficina Open",
+      "vibe": "Limpio · Sistemas · Luminoso",
+      "emoji": "💡",
+      "url": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=200&fit=crop&auto=format"
+    },
+    {
+      "id": "sp6",
+      "name": "Loft Vintage",
+      "vibe": "Analógico · Cálido · Historia",
+      "emoji": "🪑",
+      "url": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=200&fit=crop&auto=format"
+    }
+  ],
+  "spaceElements": [
+    {"id": "se1",  "ico": "🖥",  "nm": "Pantallas"},
+    {"id": "se2",  "ico": "🌿",  "nm": "Plantas"},
+    {"id": "se3",  "ico": "📚",  "nm": "Libros"},
+    {"id": "se4",  "ico": "🎸",  "nm": "Instrumentos"},
+    {"id": "se5",  "ico": "🏋️", "nm": "Gym/deporte"},
+    {"id": "se6",  "ico": "⌨️", "nm": "Tech/gadgets"},
+    {"id": "se7",  "ico": "🖼",  "nm": "Arte en pared"},
+    {"id": "se8",  "ico": "💡",  "nm": "Luz neón"},
+    {"id": "se9",  "ico": "💿",  "nm": "Vinilo/discos"},
+    {"id": "se10", "ico": "🧥",  "nm": "Ropa exhibida"},
+    {"id": "se11", "ico": "✏️", "nm": "Mesa de dibujo"},
+    {"id": "se12", "ico": "📖",  "nm": "Zona lectura"},
+    {"id": "se13", "ico": "🗿",  "nm": "Colecciones"},
+    {"id": "se14", "ico": "🔧",  "nm": "Herramientas"},
+    {"id": "se15", "ico": "📷",  "nm": "Cámara/foto"},
+    {"id": "se16", "ico": "🕯",  "nm": "Velas/ambiente"},
+    {"id": "se17", "ico": "🪴",  "nm": "Terrario"},
+    {"id": "se18", "ico": "🛋",  "nm": "Área de descanso"}
+  ]
+}

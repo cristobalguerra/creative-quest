@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creative Quest — Prueba de Admisión UDEM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles.css">
+<script type="module" src="./js/firebase.js"></script>
+</head>
+<body>
+<!-- Icon sprite (Lucide-inspired: 1.5 stroke, 24x24 viewBox) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-gem" viewBox="0 0 24 24"><path d="M6 3h12l3 6-9 12L3 9z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M3 9h18M9 3l3 6 3-6M12 9l0 12" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5 11a7 7 0 0014 0M12 18v3M8 21h8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 3v5h5M9 13h6M9 17h6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6M16 4a3.5 3.5 0 010 7M22 20c0-2.7-2-5-4.7-5.7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 8v.01M12 12v4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  </defs>
+</svg>
+
+<div id="app">
+<div id="hud">
+  <div class="logo">
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><polygon points="8,1 15,4.5 15,11.5 8,15 1,11.5 1,4.5" stroke="currentColor" stroke-width="1.4" fill="none"/><circle cx="8" cy="8" r="2.5" fill="currentColor"/></svg>
+    CREATIVE QUEST
+  </div>
+  <div class="eco-row">
+    <div class="eco"><span class="eco-ico" style="color:var(--pu-l)">◆</span><div class="eco-col"><span class="eco-val" id="ev" style="color:var(--pu-l)">0</span><div class="eco-bar"><div class="eco-fill" id="ebv" style="background:var(--pu);width:0%"></div></div></div><span class="eco-lbl">VISIÓN</span></div>
+    <div class="eco"><span class="eco-ico" style="color:var(--cy-l)">⬡</span><div class="eco-col"><span class="eco-val" id="ef" style="color:var(--cy-l)">0</span><div class="eco-bar"><div class="eco-fill" id="ebf" style="background:var(--cy);width:0%"></div></div></div><span class="eco-lbl">FORMA</span></div>
+    <div class="eco"><span class="eco-ico" style="color:var(--go-l)">★</span><div class="eco-col"><span class="eco-val" id="en" style="color:var(--go-l)">0</span><div class="eco-bar"><div class="eco-fill" id="ebn" style="background:var(--go);width:0%"></div></div></div><span class="eco-lbl">NARRAT.</span></div>
+    <div class="eco"><span class="eco-ico" style="color:var(--gr-l)">⬟</span><div class="eco-col"><span class="eco-val" id="et" style="color:var(--gr-l)">0</span><div class="eco-bar"><div class="eco-fill" id="ebt" style="background:var(--gr);width:0%"></div></div></div><span class="eco-lbl">TÉCNICA</span></div>
+  </div>
+  <div id="arch-pill" class="arch-pill"></div>
+  <div class="timer-wrap"><div class="timer" id="timer" style="color:var(--cy-l)">90:00</div></div>
+</div>
+<div id="mtrack">
+  <div class="mn locked" id="mn0" onclick="jumpM(0)" title="Tu Identidad"><span class="mn-num">1</span><span class="mn-ico">🎨</span></div><div class="mn-line"></div>
+  <div class="mn locked" id="mn1" onclick="jumpM(1)" title="Tu Look"><span class="mn-num">2</span><span class="mn-ico">👕</span></div><div class="mn-line"></div>
+  <div class="mn locked" id="mn2" onclick="jumpM(2)" title="Tu Espacio"><span class="mn-num">3</span><span class="mn-ico">🏛</span></div><div class="mn-line"></div>
+  <div class="mn locked" id="mn3" onclick="jumpM(3)" title="Tu Objeto"><span class="mn-num">4</span><span class="mn-ico">⚡</span></div><div class="mn-line"></div>
+  <div class="mn locked" id="mn4" onclick="jumpM(4)" title="Tu Historia"><span class="mn-num">5</span><span class="mn-ico">📖</span></div><div class="mn-line"></div>
+  <div class="mn mn-fin locked" id="mn5" onclick="goS('onepager')">ONE-PAGER</div>
+</div>
+<div id="content">
+
+<!-- ══ SELECT ══════════════════════════════════════════════════════ -->
+<div class="scr on" id="s-select">
+  <div class="chapter"><span class="chapter-num">01</span><span>Personaje</span></div>
+  <div class="pg-title">Elige tu personaje</div>
+  <div class="pg-sub">Tu arquetipo define tus herramientas, el orden óptimo de misiones y la paleta de tu universo. Desliza y lee bien antes de elegir.</div>
+  <div class="sl-ctrl">
+    <button class="sarr" id="sap" onclick="aMove(-1)" disabled>← Anterior</button>
+    <div class="sdots" id="sdots"></div>
+    <button class="sarr" id="san" onclick="aMove(1)">Siguiente →</button>
+  </div>
+  <div class="slider-wrap"><div class="slider-track" id="atrack"></div></div>
+  <button class="btn-confirm" onclick="confirmArch()">
+    <span class="btn-confirm-lbl">Este es mi personaje — arranquemos</span>
+    <span class="btn-confirm-arrow">→</span>
+  </button>
+</div>
+
+<!-- ══ TABLERO ═════════════════════════════════════════════════════ -->
+<div class="scr" id="s-tablero">
+  <div class="chapter"><span class="chapter-num">02</span><span>Tablero · Cinco misiones</span></div>
+  <div class="pg-title">Tu universo en cinco actos</div>
+  <div class="pg-sub">Elige en qué orden atacas las misiones. Las bloqueadas se desbloquean completando las anteriores. No hay orden correcto — sí hay un orden que cuenta mejor tu historia.</div>
+  <div class="arch-mini" id="arch-mini"></div>
+  <div class="mgrid" id="mcards"></div>
+  <button class="btn btn-p" onclick="goS('inventario')" style="max-width:280px;margin-top:4px">Ver inventario →</button>
+</div>
+
+<!-- ══ MISIÓN ACTIVA ════════════════════════════════════════════════ -->
+<div class="scr" id="s-mision">
+  <div id="m-content"></div>
+</div>
+
+<!-- ══ INVENTARIO ══════════════════════════════════════════════════ -->
+<div class="scr" id="s-inventario">
+  <div class="chapter"><span class="chapter-num">04</span><span>Inventario · Lo que llevas</span></div>
+  <div class="pg-title">Lo que cargas hasta aquí</div>
+  <div class="pg-sub">Créditos acumulados y entregables completados. Los créditos extra se gastan en desbloquear el banco visual premium dentro de cada misión.</div>
+  <div class="icreds">
+    <div class="icred"><span class="icred-i" style="color:var(--pu-l)">◆</span><div class="icred-v" id="ivv" style="color:var(--pu-l)">0</div><div class="icred-n">VISIÓN</div></div>
+    <div class="icred"><span class="icred-i" style="color:var(--cy-l)">⬡</span><div class="icred-v" id="ivf" style="color:var(--cy-l)">0</div><div class="icred-n">FORMA</div></div>
+    <div class="icred"><span class="icred-i" style="color:var(--go-l)">★</span><div class="icred-v" id="ivn" style="color:var(--go-l)">0</div><div class="icred-n">NARRATIVA</div></div>
+    <div class="icred"><span class="icred-i" style="color:var(--gr-l)">⬟</span><div class="icred-v" id="ivt" style="color:var(--gr-l)">0</div><div class="icred-n">TÉCNICA</div></div>
+  </div>
+  <div class="sec-lbl">Entregables completados</div>
+  <div class="elist" id="elist"></div>
+  <button class="btn btn-p" onclick="goS('tablero')" style="margin-top:16px;max-width:240px">← Volver al tablero</button>
+</div>
+
+<!-- ══ TU VOZ ══════════════════════════════════════════════════════ -->
+<div class="scr" id="s-voz">
+  <div class="chapter"><span class="chapter-num">05</span><span>Tu voz · Reflexión</span></div>
+  <div class="pg-title">Hablanos sin filtro</div>
+  <div class="pg-sub">Tres preguntas. No hay respuesta correcta. El evaluador lee esto para entender cómo piensas, no qué tan bien escribes. Escribe rápido y sin editar.</div>
+  <div class="voz-q" style="border-color:rgba(139,127,232,.35)">
+    <div class="voz-n" style="color:var(--pu-l)">01</div>
+    <div class="voz-t">Algo que hice hoy que no esperaba hacer fue…</div>
+    <textarea class="fi" id="voz1" placeholder="Escribe aquí..." rows="3"></textarea>
+  </div>
+  <div class="voz-q" style="border-color:rgba(31,174,128,.35)">
+    <div class="voz-n" style="color:var(--cy-l)">02</div>
+    <div class="voz-t">La misión donde más me trabé — y cómo la resolví — fue…</div>
+    <textarea class="fi" id="voz2" placeholder="" rows="3"></textarea>
+  </div>
+  <div class="voz-q" style="border-color:rgba(200,64,48,.35)">
+    <div class="voz-n" style="color:var(--co-l)">03</div>
+    <div class="voz-t">Si tuviera 15 minutos más, los usaría en…</div>
+    <textarea class="fi" id="voz3" placeholder="" rows="3"></textarea>
+  </div>
+  <button class="btn btn-g" onclick="goS('onepager')">Armar mi One-Pager final →</button>
+</div>
+
+<!-- ══ ONE PAGER ═══════════════════════════════════════════════════ -->
+<div class="scr" id="s-onepager">
+  <div class="chapter"><span class="chapter-num">06</span><span>Cierre · Tu ficha</span></div>
+  <div class="pg-title">Todo tu universo en una página</div>
+  <div class="pg-sub">Una página. Todo tu universo. Método sistema de evaluación: si no cabe claro en una página, el concepto aún no está listo. La tarjeta de abajo es lo que ve el evaluador.</div>
+  <div class="op-intro"><span style="font-size:20px">★</span><p><strong style="color:var(--pu-l)">Método Diseño de admisión:</strong> toda la información relevante en un solo vistazo. La tarjeta de arquetipo captura quién eres, qué construiste y cómo piensas.</p></div>
+  <div class="sec-lbl" style="margin-bottom:12px">Tarjeta de arquetipo — vista del evaluador</div>
+  <div id="arch-card-wrap"></div>
+  <div style="margin-bottom:18px">
+    <label class="fl" style="font-size:15px;margin-bottom:9px">Frase que resume tu universo — una sola línea:</label>
+    <input type="text" class="fi" id="op-frase" placeholder="Ej: El universo donde la tecnología tiene textura y el futuro tiene alma…" style="font-size:17px;padding:15px" oninput="updateCard()">
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px">
+    <button class="btn-exp" onclick="printCard()">🖨 Imprimir / Guardar como PDF</button>
+    <span id="op-status" style="font-size:13px;color:var(--gh)"></span>
+  </div>
+  <div class="sec-lbl">Progreso de misiones</div>
+  <div class="op-grid" id="op-grid"></div>
+</div>
+
+<!-- ══ BREAKOUT ROOM SALA ════════════════════════════════════ -->
+<div class="scr" id="s-sala">
+  <div class="chapter"><span class="chapter-num">07</span><span>Sala · Tiempo real</span></div>
+  <div class="pg-title">Sala de colaboración</div>
+  <div class="pg-sub">Conexión en tiempo real entre dispositivos. Cada aplicante trabaja desde su propio dispositivo — el evaluador y el coordinador ven el progreso en vivo.</div>
+
+  <!-- ── TABS ── -->
+  <div id="sala-tabs" style="display:flex;gap:6px;margin-bottom:18px;border-bottom:1px solid var(--bd);padding-bottom:0;align-items:flex-end">
+    <button class="sala-tab on" id="stab-aplicante" onclick="setSalaTab('aplicante')">🎮 Aplicante</button>
+    <span style="flex:1"></span>
+    <button class="eval-entry" onclick="document.getElementById('pin-gate').style.display='block';document.getElementById('pin-input').focus()">
+      🔐 Soy evaluador
+    </button>
+  </div>
+  <!-- ── PIN GATE ── -->
+  <div id="pin-gate" style="display:none;margin-bottom:18px">
+    <div class="tool-block" style="max-width:460px;border-color:rgba(139,127,232,.35)">
+      <div class="tool-lbl" style="color:var(--pu-l)">🔐 Acceso de evaluador</div>
+      <div style="font-size:13px;color:var(--gh);margin-bottom:12px;line-height:1.6">
+        Ingresa el PIN de 6 dígitos que te compartió el coordinador.
+      </div>
+      <div style="display:flex;gap:8px">
+        <input id="pin-input" type="password" maxlength="6" placeholder="● ● ● ● ● ●"
+          style="flex:1;font-size:22px;font-family:var(--fm);letter-spacing:.3em;text-align:center;margin:0;padding:12px"
+          class="fi" oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+          onkeydown="if(event.key==='Enter')verifyPin()">
+        <button class="btn btn-p" onclick="verifyPin()" style="width:auto;padding:0 20px;margin:0;font-size:14px">Verificar</button>
+      </div>
+      <div id="pin-error" style="display:none;margin-top:8px;font-size:12px;color:var(--co-l)"></div>
+      <button onclick="document.getElementById('pin-gate').style.display='none'"
+        style="background:transparent;border:none;color:var(--mu);font-size:12px;cursor:pointer;margin-top:10px;padding:0">
+        ← Volver
+      </button>
+    </div>
+  </div>
+
+  <!-- ── PANEL APLICANTE ── -->
+  <div id="spanel-aplicante" style="display:block">
+    <div id="sala-join" style="display:block">
+      <div class="tool-block" style="max-width:min(500px,100%)">
+        <div class="tool-lbl">Unirse a una sala</div>
+        <label class="fl">Tu nombre</label>
+        <input class="fi" id="sala-name" type="text" placeholder="Ej: Ana García" style="margin-bottom:10px" autocomplete="off">
+        <label class="fl">Código de sala — pídelo al evaluador</label>
+        <div style="display:flex;gap:8px">
+          <input class="fi" id="sala-code" type="text" placeholder="ARTE" maxlength="4"
+            style="margin:0;text-transform:uppercase;font-family:var(--fm);font-size:24px;font-weight:700;flex:1;letter-spacing:.35em;text-align:center">
+          <button class="btn btn-p" onclick="joinSala()" style="width:auto;padding:0 22px;margin:0;font-size:14px">Entrar →</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="sala-active" style="display:none">
+      <div class="room-banner">
+        <div class="room-dot"></div>
+        <span>Conectado · Sala</span>
+        <span class="room-badge" id="sala-code-display"></span>
+        <span id="sala-members-count" style="margin-left:auto;color:var(--cy-l);font-size:12px"></span>
+      </div>
+      <div style="font-size:13px;color:var(--gh);line-height:1.6;background:var(--bg2);border:.5px solid var(--bd);border-radius:8px;padding:11px 14px;margin-bottom:14px">
+        El evaluador ve tu progreso en tiempo real. Trabaja en tus misiones normalmente — cada vez que completes una, se actualiza automáticamente.
+      </div>
+      <div class="sec-lbl" style="margin-bottom:10px">Equipo en esta sala</div>
+      <div class="team-grid" id="team-grid"></div>
+      <button class="btn" onclick="leaveSala()" style="max-width:200px;margin-top:4px;background:rgba(200,64,48,.12);border-color:rgba(200,64,48,.35);color:#E87060">Salir de la sala</button>
+    </div>
+  </div>
+
+  <!-- ── PANEL EVALUADOR ── -->
+  <div id="spanel-evaluador" style="display:none">
+    <div id="eval-join" style="display:block">
+      <div class="tool-block" style="max-width:min(500px,100%)">
+        <div class="tool-lbl">Crear sala y monitorear en vivo</div>
+        <div style="font-size:13px;color:var(--gh);margin-bottom:12px;line-height:1.6">
+          Crea una sala, comparte el código por Zoom y observa el progreso de tu grupo en tiempo real.
+        </div>
+        <button class="btn btn-g" onclick="createAndWatchSala()" style="margin-bottom:12px">+ Crear sala nueva</button>
+        <div style="font-size:12px;color:var(--mu);margin-bottom:8px;text-align:center">— o entra a una sala existente —</div>
+        <div style="display:flex;gap:8px">
+          <input class="fi" id="eval-code" type="text" placeholder="ARTE" maxlength="4"
+            style="margin:0;text-transform:uppercase;font-family:var(--fm);font-size:20px;flex:1;letter-spacing:.25em;text-align:center">
+          <button class="btn btn-c" onclick="openEvalView()" style="width:auto;padding:0 18px;margin:0;font-size:13px">Ver equipo →</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="sala-eval" style="display:none">
+      <div class="room-banner">
+        <div class="room-dot"></div>
+        <span>Vista evaluador · Sala</span>
+        <span class="room-badge" id="eval-code-display"></span>
+        <span id="eval-members-count" style="margin-left:auto;color:var(--cy-l);font-size:12px"></span>
+      </div>
+      <div id="eval-share-banner" style="background:rgba(139,127,232,.1);border:.5px solid rgba(139,127,232,.3);border-radius:9px;padding:11px 14px;margin-bottom:14px;font-size:13px;line-height:1.8">
+        <strong style="color:var(--pu-l)">Comparte por Zoom:</strong>
+        código de sala <strong id="eval-code-show" style="font-family:var(--fm);font-size:17px;color:var(--pu-l);letter-spacing:.2em;background:rgba(139,127,232,.15);padding:1px 8px;border-radius:5px"></strong>
+        <span style="color:var(--gh);display:block;margin-top:3px;font-size:12px">Los aplicantes van a "🎮 Aplicante", escriben su nombre y el código.</span>
+      </div>
+      <div id="capacity-bar" style="font-size:12px;color:var(--gh);margin-bottom:10px"></div>
+      <div class="sec-lbl" style="margin-bottom:10px">Panel del equipo — actualización automática</div>
+      <div class="team-grid" id="eval-team-grid"></div>
+      <div class="tool-block" style="margin-top:8px">
+        <div class="tool-lbl">Notas de observación</div>
+        <textarea class="fi" id="colab-notes" placeholder="¿Quién tomó la iniciativa? ¿Cómo resolvieron conflictos de arquetipo? ¿Hay coherencia narrativa entre los universos?" rows="4"></textarea>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+        <button class="btn" onclick="leaveEval()" style="width:auto;padding:0 16px;background:rgba(200,64,48,.12);border-color:rgba(200,64,48,.35);color:#E87060">Cerrar sala</button>
+        <button class="btn" onclick="revokeEvalAccess()" style="width:auto;padding:0 16px;background:rgba(200,64,48,.06);border-color:rgba(200,64,48,.2);color:#C07070;font-size:12px">🔒 Cerrar sesión de evaluador</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PANEL COORDINADOR ── -->
+  <div id="spanel-coordinador" style="display:none">
+    <div class="tool-block" style="max-width:min(620px,100%);border-color:rgba(139,127,232,.35);margin-bottom:16px">
+      <div class="tool-lbl" style="color:var(--pu-l)">🔐 Generar PINs de sesión</div>
+      <div style="font-size:13px;color:var(--gh);margin-bottom:12px;line-height:1.6">
+        Genera PINs de 6 dígitos para que evaluadores accedan a su panel. Expiran en 4 horas.
+        <strong style="color:var(--wh)"> Compártelos por canal privado</strong> — nunca en el chat de Zoom donde los aplicantes puedan verlos.
+      </div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px">
+        <button class="btn btn-p" onclick="generateSessionPin()" style="width:auto;padding:0 18px;margin:0;font-size:13px">+ PIN Evaluador</button>
+        <button class="btn btn-g" onclick="generateCoordPin()" style="width:auto;padding:0 18px;margin:0;font-size:13px">+ PIN Coordinador</button>
+      </div>
+      <div id="generated-pin-display" style="display:none;background:rgba(139,127,232,.08);border:.5px solid rgba(139,127,232,.25);border-radius:9px;padding:14px;text-align:center"></div>
+    </div>
+
+    <div class="tool-block" style="max-width:min(620px,100%)">
+      <div class="tool-lbl">🗂 Panel maestro — todas las salas activas</div>
+      <div style="font-size:13px;color:var(--gh);margin-bottom:14px;line-height:1.6">
+        Genera los códigos para todos los equipos de una sesión, monitorea el estado global y limpia salas terminadas.
+      </div>
+
+      <!-- Batch generator -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <label style="font-size:13px;color:var(--wh)">Número de equipos:</label>
+        <input id="batch-n" type="number" min="1" max="20" value="5"
+          style="width:64px;background:var(--bg3);border:1px solid var(--bd);border-radius:7px;padding:7px 10px;color:var(--wh);font-size:15px;font-family:var(--fm);text-align:center">
+        <label style="font-size:13px;color:var(--wh)">Máx. por sala:</label>
+        <input id="batch-max" type="number" min="2" max="10" value="6"
+          style="width:64px;background:var(--bg3);border:1px solid var(--bd);border-radius:7px;padding:7px 10px;color:var(--wh);font-size:15px;font-family:var(--fm);text-align:center">
+        <button class="btn btn-g" onclick="generateBatchSalas()" style="width:auto;padding:0 18px;margin:0">Generar salas</button>
+      </div>
+
+      <!-- Generated codes display -->
+      <div id="batch-codes" style="display:none;margin-bottom:14px">
+        <div class="tool-lbl" style="margin-bottom:8px">Códigos generados — copia y comparte con cada evaluador</div>
+        <div id="batch-codes-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px"></div>
+        <button class="btn btn-c" onclick="copyAllCodes()" style="margin-top:10px;width:auto;padding:0 16px">📋 Copiar todos</button>
+      </div>
+    </div>
+
+    <!-- Master view of all generated rooms -->
+    <div id="master-panel" style="display:none">
+      <div class="room-banner" style="margin-bottom:14px">
+        <div class="room-dot"></div>
+        <span>Monitor global — <span id="master-active-count">0</span> salas activas</span>
+        <button onclick="refreshMasterPanel()" style="margin-left:auto;background:transparent;border:.5px solid var(--bd);color:var(--gh);border-radius:6px;padding:3px 10px;cursor:pointer;font-size:11px">↻ Actualizar</button>
+      </div>
+      <div id="master-rooms-grid" style="display:flex;flex-direction:column;gap:14px"></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div id="bnav">
+  <button class="nb on" id="nb-select" onclick="goS('select')"><svg class="nb-ico" width="18" height="18"><use href="#i-user"/></svg><span class="nb-lbl">Perfil</span></button>
+  <button class="nb" id="nb-tablero" onclick="goS('tablero')"><svg class="nb-ico" width="18" height="18"><use href="#i-grid"/></svg><span class="nb-lbl">Tablero</span></button>
+  <button class="nb" id="nb-mision" onclick="goS('mision')"><svg class="nb-ico" width="18" height="18"><use href="#i-bolt"/></svg><span class="nb-lbl">Misión</span></button>
+  <button class="nb" id="nb-inventario" onclick="goS('inventario')"><svg class="nb-ico" width="18" height="18"><use href="#i-gem"/></svg><span class="nb-lbl">Créditos</span></button>
+  <button class="nb" id="nb-voz" onclick="goS('voz')"><svg class="nb-ico" width="18" height="18"><use href="#i-mic"/></svg><span class="nb-lbl">Tu Voz</span></button>
+  <button class="nb" id="nb-onepager" onclick="goS('onepager')"><svg class="nb-ico" width="18" height="18"><use href="#i-doc"/></svg><span class="nb-lbl">One-Pager</span></button>
+  <button class="nb" id="nb-sala" onclick="goS('sala')"><svg class="nb-ico" width="18" height="18"><use href="#i-users"/></svg><span class="nb-lbl">Sala</span></button>
+</div>
+</div>
+
+<div id="toast-wrap"></div>
+
+<script src="./js/app.js"></script>
+</body>
+</html>

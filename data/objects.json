@@ -1,0 +1,122 @@
+{
+  "tech": [
+    {
+      "id": "o1",
+      "ico": "🎮",
+      "nm": "Control gaming",
+      "sub": "Gadget interactivo",
+      "url": "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=240&h=160&fit=crop&auto=format"
+    },
+    {
+      "id": "o2",
+      "ico": "📷",
+      "nm": "Cámara analógica",
+      "sub": "Fotografía de película",
+      "url": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=240&h=160&fit=crop&auto=format"
+    },
+    {
+      "id": "o3",
+      "ico": "💻",
+      "nm": "Laptop custom",
+      "sub": "Tech personal",
+      "url": "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=240&h=160&fit=crop&auto=format"
+    },
+    {
+      "id": "o4",
+      "ico": "🎧",
+      "nm": "Audífonos pro",
+      "sub": "Audio de alta fidelidad",
+      "url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=240&h=160&fit=crop&auto=format"
+    }
+  ],
+  "fashion": [
+    {
+      "id": "o5",
+      "ico": "👟",
+      "nm": "Sneaker signature",
+      "sub": "Calzado icónico",
+      "url": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=240&h=160&fit=crop&auto=format"
+    },
+    {
+      "id": "o6",
+      "ico": "👜",
+      "nm": "Bolso artesanal",
+      "sub": "Accesorio hecho a mano",
+      "url": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=240&h=160&fit=crop&auto=format"
+    },
+    {
+      "id": "o7",
+      "ico": "🕶",
+      "nm": "Lentes de diseño",
+      "sub": "Eyewear único",
+      "url": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=240&h=160&fit=crop&auto=format"
+    },
+    {
+      "id": "o8",
+      "ico": "⌚",
+      "nm": "Reloj de diseño",
+      "sub": "Joyería funcional",
+      "url": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=240&h=160&fit=crop&auto=format"
+    }
+  ],
+  "craft": [
+    {
+      "id": "o9",
+      "ico": "📓",
+      "nm": "Cuaderno artesanal",
+      "sub": "Escritura analógica",
+      "url": "https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=240&h=160&fit=crop&auto=format"
+    },
+    {
+      "id": "o10",
+      "ico": "🎸",
+      "nm": "Guitarra signature",
+      "sub": "Instrumento musical",
+      "url": "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=240&h=160&fit=crop&auto=format"
+    },
+    {
+      "id": "o11",
+      "ico": "🖋",
+      "nm": "Pluma especial",
+      "sub": "Escritura de precisión",
+      "url": "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=240&h=160&fit=crop&auto=format"
+    },
+    {
+      "id": "o12",
+      "ico": "🎨",
+      "nm": "Set de pintura",
+      "sub": "Arte analógico",
+      "url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=240&h=160&fit=crop&auto=format"
+    }
+  ],
+  "sport": [
+    {
+      "id": "o13",
+      "ico": "⚽",
+      "nm": "Balón personalizado",
+      "sub": "Deporte de equipo",
+      "url": "https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=240&h=160&fit=crop&auto=format"
+    },
+    {
+      "id": "o14",
+      "ico": "🏋️",
+      "nm": "Pesas de diseño",
+      "sub": "Fitness con estética",
+      "url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=240&h=160&fit=crop&auto=format"
+    },
+    {
+      "id": "o15",
+      "ico": "🧗",
+      "nm": "Equipo de escalada",
+      "sub": "Aventura urbana",
+      "url": "https://images.unsplash.com/photo-1522163182402-834f871fd851?w=240&h=160&fit=crop&auto=format"
+    },
+    {
+      "id": "o16",
+      "ico": "🥊",
+      "nm": "Guantes de boxeo",
+      "sub": "Arte marcial",
+      "url": "https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?w=240&h=160&fit=crop&auto=format"
+    }
+  ]
+}

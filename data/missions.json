@@ -1,0 +1,198 @@
+[
+  {
+    "id": 0,
+    "name": "Tu Identidad",
+    "disc": "Moodboard, paleta y logo",
+    "brief": "Crea la imagen visual de tu personaje. Moodboard con referencias reales, paleta de color y concepto de logo. Todo tiene que ser coherente — es la primera impresión de tu universo.",
+    "time": 18,
+    "ch": "#8B7FE8",
+    "cx": "var(--pu-x)",
+    "cr": {"v": 3, "f": 1, "n": 0, "t": 0},
+    "reto": {
+      "q": "Si tu personaje fuera una paleta de colores, ¿cuál sería el principio dominante?",
+      "opts": [
+        "Alto contraste: negros puros con acentos eléctricos muy saturados",
+        "Gradiente de análogos: tonos vecinos que crean suavidad y cohesión",
+        "Monocromático puro: una sola familia de tono, de oscuro a claro",
+        "Contraste de textura: los colores son secundarios, la materialidad es lo primero"
+      ],
+      "corr": 0,
+      "just": "El contraste es la herramienta principal de identidad visual. Las marcas más reconocibles mundialmente usan alto contraste porque la memoria visual trabaja con diferencias, no con similitudes."
+    },
+    "decs": [
+      {
+        "q": "¿Cómo arrancas el moodboard?",
+        "opts": [
+          {"t": "Imagen primero", "s": "La imagen perfecta y de ahí derivas todo.", "g": {"v": 1}, "c": "◆+1 Visión"},
+          {"t": "Color primero", "s": "La paleta define qué imágenes son válidas.", "g": {"f": 1}, "c": "⬡+1 Forma"},
+          {"t": "Tipografía primero", "s": "La letra define el tono de todo.", "g": {"n": 1}, "c": "★+1 Narrativa"},
+          {"t": "Concepto primero", "s": "Una palabra guía y todo se deriva de ella.", "g": {"v": 2}, "c": "◆+2 Visión"}
+        ]
+      },
+      {
+        "q": "¿Cómo defines el logo?",
+        "opts": [
+          {"t": "Solo tipografía", "s": "El nombre bien puesto lo dice todo.", "g": {"v": 1}, "c": "◆+1"},
+          {"t": "Símbolo + texto", "s": "Ícono y nombre juntos: sistema completo.", "g": {"f": 1}, "c": "⬡+1"},
+          {"t": "Solo símbolo", "s": "El ícono lo dice todo sin palabras.", "g": {"v": 1, "n": 1}, "c": "◆+1 ★+1"},
+          {"t": "Collage visual", "s": "Varias imágenes formando una marca.", "g": {"f": 1, "t": 1}, "c": "⬡+1 ⬟+1"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Tu Look",
+    "disc": "Vestuario y estilo del personaje",
+    "brief": "Diseña el outfit completo. No solo cómo se ve: por qué se ve así. Cada prenda tiene que justificar su presencia. Usa el sistema de capas para construir el look.",
+    "time": 15,
+    "ch": "#1FAE80",
+    "cx": "var(--cy-x)",
+    "cr": {"v": 0, "f": 2, "n": 1, "t": 0},
+    "reto": {
+      "q": "¿Qué principio de diseño de moda es más fundamental para crear un look con identidad propia?",
+      "opts": [
+        "Form follows function — cada prenda existe porque tiene un propósito claro",
+        "Less is more — la reducción al esencial revela la verdadera estética",
+        "More is more — la acumulación y capas crean una voz visual inconfundible",
+        "Cultural remix — mezclar referentes de mundos distintos para crear algo nuevo"
+      ],
+      "corr": 0,
+      "just": "Form follows function es el principio más fundamental del diseño: cuando cada prenda justifica su presencia con una razón funcional o conceptual, el resultado tiene integridad visual. Los demás principios son estilos válidos, pero este es el fundamento que los sostiene a todos."
+    },
+    "decs": [
+      {
+        "q": "¿Cuál es el elemento signature del look?",
+        "opts": [
+          {"t": "El calzado", "s": "Los zapatos definen todo lo que viene arriba.", "g": {"f": 2}, "c": "⬡+2"},
+          {"t": "El outerwear", "s": "La chaqueta es lo primero que ves de lejos.", "g": {"f": 1, "v": 1}, "c": "⬡+1 ◆+1"},
+          {"t": "Un accesorio único", "s": "Un elemento que nadie más tendría.", "g": {"v": 2}, "c": "◆+2"},
+          {"t": "La paleta de colores", "s": "Los colores juntos son el signature.", "g": {"f": 1, "n": 1}, "c": "⬡+1 ★+1"}
+        ]
+      },
+      {
+        "q": "¿Qué justifica cada prenda?",
+        "opts": [
+          {"t": "Funcionalidad real", "s": "Todo tiene un uso práctico visible.", "g": {"f": 1, "t": 1}, "c": "⬡+1 ⬟+1"},
+          {"t": "Referencia cultural", "s": "Cada pieza apunta a un mundo específico.", "g": {"v": 1, "n": 1}, "c": "◆+1 ★+1"},
+          {"t": "Coherencia estética", "s": "Todo tiene que verse bien junto.", "g": {"v": 1}, "c": "◆+1"},
+          {"t": "Oposición deliberada", "s": "Piezas que no deberían ir juntas — ese es el punto.", "g": {"n": 2}, "c": "★+2"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Tu Espacio",
+    "disc": "El lugar donde vive y crea tu personaje",
+    "brief": "Diseña el espacio físico de tu personaje. Lo que hay ahí dice quién es tanto como su ropa. Elige el tipo de espacio y sus elementos con referencias reales.",
+    "time": 15,
+    "ch": "#D4960A",
+    "cx": "var(--go-x)",
+    "cr": {"v": 1, "f": 2, "n": 0, "t": 1},
+    "reto": {
+      "q": "¿Qué dice más de una persona: su ropa o su espacio?",
+      "opts": [
+        "Su ropa — es lo primero que controlas y proyectas",
+        "Su espacio — es lo que construyes cuando nadie te ve",
+        "Son equivalentes — uno es público y el otro privado",
+        "Ninguno — lo que dice más es cómo habla"
+      ],
+      "corr": 1,
+      "just": "El espacio revela decisiones que tomas cuando no hay audiencia. Es lo más auténtico. La ropa puede ser performativa; el espacio construido no miente sobre quien vive ahí."
+    },
+    "decs": [
+      {
+        "q": "¿Cómo se organiza el espacio?",
+        "opts": [
+          {"t": "Sistema y orden", "s": "Cada cosa tiene lugar y lógica visible.", "g": {"t": 2}, "c": "⬟+2"},
+          {"t": "Caos productivo", "s": "Parece desordenado pero el dueño sabe dónde está todo.", "g": {"f": 1, "n": 1}, "c": "⬡+1 ★+1"},
+          {"t": "Minimalismo extremo", "s": "Solo lo esencial. Cada objeto ganó su lugar.", "g": {"v": 2}, "c": "◆+2"},
+          {"t": "Museo personal", "s": "Lleno de objetos con historia.", "g": {"n": 2}, "c": "★+2"}
+        ]
+      },
+      {
+        "q": "¿Qué tipo de luz define el espacio?",
+        "opts": [
+          {"t": "Luz natural", "s": "Ventanas grandes, el sol es parte del diseño.", "g": {"f": 1}, "c": "⬡+1"},
+          {"t": "Luz artificial controlada", "s": "LEDs y lámparas de diseño, atmósfera construida.", "g": {"f": 1, "v": 1}, "c": "⬡+1 ◆+1"},
+          {"t": "Poca luz, íntimo", "s": "Lo que no se ve claramente también comunica.", "g": {"n": 1}, "c": "★+1"},
+          {"t": "Luz de trabajo, funcional", "s": "Para producir, no para verse bien.", "g": {"t": 1}, "c": "⬟+1"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Tu Objeto",
+    "disc": "El gadget signature del personaje",
+    "brief": "El objeto que define a tu personaje. Ese gadget o accesorio que solo él tendría. Elige con referencias visuales reales y anota lo que lo hace único.",
+    "time": 15,
+    "ch": "#C84030",
+    "cx": "var(--co-x)",
+    "cr": {"v": 0, "f": 2, "n": 0, "t": 2},
+    "reto": {
+      "q": "¿Qué hace que un objeto sea icónico y reconocible para siempre?",
+      "opts": [
+        "Su forma — la silueta lo identifica en silhouette pura",
+        "Su función — hace algo que ningún otro puede hacer",
+        "Su historia — de dónde vino antes de llegar a tus manos",
+        "Su dueño — es icónico porque quien lo usa lo es"
+      ],
+      "corr": 0,
+      "just": "La forma es lo que persiste en el tiempo. La Converse All-Star, la Leica, el iPhone 1 — los reconoces por silueta sin marca ni texto. El diseño de forma es la disciplina más difícil y la que más dura."
+    },
+    "decs": [
+      {
+        "q": "¿Qué tipo de objeto es?",
+        "opts": [
+          {"t": "Tecnológico / digital", "s": "Tech que solo este personaje tendría.", "g": {"t": 2}, "c": "⬟+2"},
+          {"t": "Artesanal / analógico", "s": "Hecho a mano, único, historia visible.", "g": {"n": 2}, "c": "★+2"},
+          {"t": "Híbrido tech-artesanal", "s": "Tecnología con acabados manuales.", "g": {"f": 1, "t": 1}, "c": "⬡+1 ⬟+1"},
+          {"t": "Accesorio de moda", "s": "Más cerca del fashion que del gadget.", "g": {"v": 1, "f": 1}, "c": "◆+1 ⬡+1"}
+        ]
+      },
+      {
+        "q": "¿Cómo se ve fuera de contexto?",
+        "opts": [
+          {"t": "Reconocible de inmediato", "s": "La forma lo dice todo sin explicación.", "g": {"f": 2}, "c": "⬡+2"},
+          {"t": "Misterioso hasta usarlo", "s": "No entiendes qué es hasta que lo ves en acción.", "g": {"n": 2}, "c": "★+2"},
+          {"t": "Deliberadamente común", "s": "Parece ordinario — ese es el punto.", "g": {"v": 1}, "c": "◆+1"},
+          {"t": "Arte más que objeto", "s": "Dudas si es funcional o solo decorativo.", "g": {"v": 1, "n": 1}, "c": "◆+1 ★+1"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Tu Historia",
+    "disc": "Cómo cuenta tu personaje su mundo",
+    "brief": "El canal y formato con el que tu personaje cuenta su historia. El medio forma parte del mensaje. Elige tu ruta y construye el storyboard.",
+    "time": 15,
+    "ch": "#C0308A",
+    "cx": "var(--ro-x)",
+    "cr": {"v": 1, "f": 0, "n": 3, "t": 1},
+    "reto": {
+      "q": "¿Qué es lo primero que define el medio correcto para contar una historia?",
+      "opts": [
+        "La audiencia — quién te ve define cómo lo cuentas",
+        "El mensaje — el contenido dicta el formato",
+        "El creator — cuentas mejor donde te sientes cómodo",
+        "El algoritmo — vas donde hay más alcance"
+      ],
+      "corr": 1,
+      "just": "La forma sigue a la función. Si el mensaje es visual y estático, no lo fuerzas a video. Marshall McLuhan: el medio es el mensaje. Los creators que entienden esto construyen formatos; los demás solo los usan."
+    },
+    "decs": [
+      {
+        "q": "¿Cuál es tu ruta?",
+        "opts": [
+          {"t": "Ruta A — Narrativa + UX", "s": "Storyboard 4 cuadros + mockup de pantalla o interfaz.", "g": {"n": 3, "t": 1}, "c": "★+3 ⬟+1"},
+          {"t": "Ruta B — Animación", "s": "Storyboard 3 cuadros + micro-animación o flipbook.", "g": {"f": 2, "n": 2}, "c": "⬡+2 ★+2"},
+          {"t": "Ruta C — Editorial visual", "s": "Layout editorial: portada + spread + contenido.", "g": {"n": 2, "v": 1}, "c": "★+2 ◆+1"},
+          {"t": "Ruta D — Experiencia física", "s": "Concept de experiencia en espacio o instalación.", "g": {"v": 2, "n": 2}, "c": "◆+2 ★+2"}
+        ]
+      }
+    ]
+  }
+]

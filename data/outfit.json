@@ -1,0 +1,59 @@
+{
+  "silhouettes": {
+    "M": [
+      {"id": "MA", "label": "Atlético",   "desc": "Hombros anchos, torso en V"},
+      {"id": "MB", "label": "Corpulento", "desc": "Complexión fuerte y amplia"},
+      {"id": "MC", "label": "Delgado",    "desc": "Silueta lineal, poco volumen"},
+      {"id": "MD", "label": "Promedio",   "desc": "Proporciones equilibradas"},
+      {"id": "ME", "label": "Alto",       "desc": "Extremidades largas, porte elongado"},
+      {"id": "MF", "label": "Compacto",   "desc": "Estructura baja y sólida"}
+    ],
+    "F": [
+      {"id": "FA", "label": "Reloj de arena",     "desc": "Hombros y cadera proporcionados, cintura marcada"},
+      {"id": "FB", "label": "Pera",                "desc": "Cadera más amplia, hombros estrechos"},
+      {"id": "FC", "label": "Rectilínea",          "desc": "Silueta uniforme, sin curva marcada"},
+      {"id": "FD", "label": "Triangular inv.",     "desc": "Hombros amplios, cadera estrecha"},
+      {"id": "FE", "label": "Editorial",           "desc": "Alta y estilizada, gran porte"},
+      {"id": "FF", "label": "Petite",              "desc": "Compacta y proporcionada"}
+    ]
+  },
+  "clothing": {
+    "tops": [
+      {"id": "t1", "ico": "👕", "nm": "T-shirt"},
+      {"id": "t2", "ico": "👔", "nm": "Camisa formal"},
+      {"id": "t3", "ico": "🧥", "nm": "Chaqueta"},
+      {"id": "t4", "ico": "🩱", "nm": "Crop top"},
+      {"id": "t5", "ico": "🎽", "nm": "Jersey/hoodie"},
+      {"id": "t6", "ico": "🥻", "nm": "Kimono/túnica"}
+    ],
+    "bottoms": [
+      {"id": "b1", "ico": "👖", "nm": "Jeans"},
+      {"id": "b2", "ico": "🩳", "nm": "Shorts/cargo"},
+      {"id": "b3", "ico": "👗", "nm": "Falda/vestido"},
+      {"id": "b4", "ico": "👖", "nm": "Pantalón ancho"},
+      {"id": "b5", "ico": "🩳", "nm": "Joggers"},
+      {"id": "b6", "ico": "🩱", "nm": "Body/leggings"}
+    ],
+    "shoes": [
+      {"id": "s1", "ico": "👟", "nm": "Sneakers"},
+      {"id": "s2", "ico": "👞", "nm": "Oxford/derby"},
+      {"id": "s3", "ico": "👠", "nm": "Tacones"},
+      {"id": "s4", "ico": "🥾", "nm": "Botas"},
+      {"id": "s5", "ico": "🩴", "nm": "Sandalias"},
+      {"id": "s6", "ico": "🥿", "nm": "Loafers"}
+    ],
+    "acc": [
+      {"id": "a1", "ico": "🧢", "nm": "Gorra/cap"},
+      {"id": "a2", "ico": "🎩", "nm": "Sombrero"},
+      {"id": "a3", "ico": "🧣", "nm": "Bufanda/pañuelo"},
+      {"id": "a4", "ico": "💍", "nm": "Joyería"},
+      {"id": "a5", "ico": "🕶", "nm": "Lentes"},
+      {"id": "a6", "ico": "👜", "nm": "Bolsa/mochila"}
+    ]
+  },
+  "outfitColors": [
+    "#0A0A0A", "#1A1A2E", "#2A2A4A", "#1D3A5C", "#0A3A2A",
+    "#4A1A1A", "#4A2A00", "#3A3A00", "#FFFFFF", "#E8C88A",
+    "#D85A30", "#C090A0", "#6E00FF", "#00FFFF", "#3B8A20"
+  ]
+}

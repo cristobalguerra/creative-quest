@@ -1,0 +1,147 @@
+[
+  {
+    "id": 0,
+    "code": "FUT",
+    "name": "Gamer Futurista",
+    "icon": "🎮",
+    "image": "./assets/characters/Gamer futurista.png",
+    "hex": "#8B7FE8",
+    "ax": "var(--pu)",
+    "ax2": "var(--pu-x)",
+    "sub": "Vives en el futuro. Oscuro, tecnológico y acelerado. Cada decisión visual tiene que sentirse como si viniera del año 2087.",
+    "tags": ["Oscuro", "Neon", "Geométrico"],
+    "tools": [
+      "Procreate — logo dark y tipografía neon",
+      "Coolors — paleta neon oscura",
+      "Figma — UI futurista / HUD",
+      "FlipaClip — micro-animación de logo",
+      "Tinkercad — gadget 3D"
+    ],
+    "order": [
+      "M1 — identidad neon oscura",
+      "M4 — gadget tecnológico",
+      "M5 Ruta B — animación",
+      "M3 — setup tech",
+      "M2 — armor y cyber"
+    ],
+    "pal": ["#0D0D1A", "#1A0A3A", "#6E00FF", "#00FFFF", "#FF00A0"],
+    "palTxt": "Void · Indigo · Neon · Cyan · Hot pink",
+    "cr": {"v": 4, "f": 4, "n": 2, "t": 3}
+  },
+  {
+    "id": 1,
+    "code": "BOH",
+    "name": "Artista Bohemio",
+    "icon": "🎨",
+    "image": "./assets/characters/bohemio.png",
+    "hex": "#D4960A",
+    "ax": "var(--go)",
+    "ax2": "var(--go-x)",
+    "sub": "Todo tiene historia. Coleccionas, reciclas y resignificas. Tu espacio es un museo personal.",
+    "tags": ["Cálido", "Textura", "Orgánico"],
+    "tools": [
+      "Adobe Capture — texturas físicas",
+      "Procreate — ilustración vintage",
+      "Coolors — paleta tierra",
+      "Pinterest — referencias retro",
+      "Stop Motion — objeto animado"
+    ],
+    "order": [
+      "M1 — moodboard collage analógico",
+      "M3 — taller artístico",
+      "M2 — boho + textiles",
+      "M4 — objeto artesanal",
+      "M5 Ruta A — storyboard"
+    ],
+    "pal": ["#3B2A1A", "#8B6520", "#C4913A", "#E8C88A", "#F5EDD8"],
+    "palTxt": "Tierra · Ocre · Dorado · Arena · Crema",
+    "cr": {"v": 5, "f": 3, "n": 4, "t": 1}
+  },
+  {
+    "id": 2,
+    "code": "URB",
+    "name": "Deportista Urbano",
+    "icon": "🏀",
+    "image": "./assets/characters/Deportista urbano.png",
+    "hex": "#C84030",
+    "ax": "var(--co)",
+    "ax2": "var(--co-x)",
+    "sub": "La calle es tu cancha. Funcional y con actitud. Movimiento constante, paleta bold.",
+    "tags": ["Urban", "Bold", "Movimiento"],
+    "tools": [
+      "Fashion Design Flat — prendas sport",
+      "Coolors — paleta bold",
+      "SketchBook — boceto sneaker",
+      "Homestyler — espacio urbano",
+      "FlipaClip — animación dinámica"
+    ],
+    "order": [
+      "M2 — outfit streetwear",
+      "M4 — sneaker signature",
+      "M1 — marca bold",
+      "M3 — espacio urbano",
+      "M5 Ruta B — movimiento"
+    ],
+    "pal": ["#1A0A05", "#8B3010", "#D85A30", "#F5A070", "#F0E8D0"],
+    "palTxt": "Carbón · Ladrillo · Coral · Salmón · Off-white",
+    "cr": {"v": 3, "f": 5, "n": 2, "t": 3}
+  },
+  {
+    "id": 3,
+    "code": "IND",
+    "name": "Músico Indie",
+    "icon": "🎵",
+    "image": "./assets/characters/Musico Indie.png",
+    "hex": "#C0308A",
+    "ax": "var(--ro)",
+    "ax2": "var(--ro-x)",
+    "sub": "Menos es más. Cada elemento tiene razón de estar. Estética austera pero profunda.",
+    "tags": ["Minimal", "Silencio", "Pálido"],
+    "tools": [
+      "Procreate — ilustración lineal",
+      "Coolors — paleta desaturada",
+      "Figma — portada de álbum",
+      "SketchBook — instrumento",
+      "Stop Motion — video atmosférico"
+    ],
+    "order": [
+      "M1 — identidad tipográfica",
+      "M5 Ruta A — mockup portada",
+      "M2 — oversized monocromo",
+      "M3 — espacio íntimo",
+      "M4 — instrumento signature"
+    ],
+    "pal": ["#1A1020", "#6A3A5A", "#C090A0", "#E8D0DA", "#F8F0F4"],
+    "palTxt": "Medianoche · Bermellon · Rosa · Blush · Blanco",
+    "cr": {"v": 5, "f": 2, "n": 5, "t": 1}
+  },
+  {
+    "id": 4,
+    "code": "TEC",
+    "name": "Tech Entrepreneur",
+    "icon": "💡",
+    "image": "./assets/characters/Tech Entrepreneur.png",
+    "hex": "#3A8A18",
+    "ax": "var(--gr)",
+    "ax2": "var(--gr-x)",
+    "sub": "Construyes en público. Estética limpia, sistemas modulares. Si no es claro, está mal.",
+    "tags": ["Limpio", "Sistemas", "Escalable"],
+    "tools": [
+      "Figma — sistema de marca",
+      "Coolors — paleta clean",
+      "Procreate — logo geométrico",
+      "Homestyler — open workspace",
+      "SketchBook — gadget minimal"
+    ],
+    "order": [
+      "M5 Ruta A — mockup app",
+      "M1 — logotipo clean",
+      "M4 — gadget minimal",
+      "M3 — oficina open",
+      "M2 — look casual tech"
+    ],
+    "pal": ["#0A1208", "#1A3A10", "#3B8A20", "#90C060", "#F0F8E8"],
+    "palTxt": "Bosque · Verde prof · Verde · Lima · Blanco",
+    "cr": {"v": 3, "f": 3, "n": 3, "t": 4}
+  }
+]

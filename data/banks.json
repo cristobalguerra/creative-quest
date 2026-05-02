@@ -1,0 +1,40 @@
+{
+  "mbImages": {
+    "free": [
+      {"id": "mb1",  "lbl": "Oscuridad",    "g": "linear-gradient(135deg,#0A0A18,#3A1A6A)", "ico": "🌑"},
+      {"id": "mb2",  "lbl": "Luz Neón",     "g": "linear-gradient(135deg,#050510,#00FFFF33,#FF00A022)", "ico": "⚡"},
+      {"id": "mb3",  "lbl": "Ciudad",       "g": "linear-gradient(180deg,#0D1520,#253348)", "ico": "🏙"},
+      {"id": "mb4",  "lbl": "Arquitectura", "g": "linear-gradient(120deg,#C8B89A,#A09278)", "ico": "🏛"},
+      {"id": "mb5",  "lbl": "Moda",         "g": "linear-gradient(160deg,#1A0A2A,#4A0A3A)", "ico": "👗"},
+      {"id": "mb6",  "lbl": "Arte",         "g": "linear-gradient(135deg,#F5EDD8,#D84020,#2060A0)", "ico": "🎨"},
+      {"id": "mb7",  "lbl": "Tecnología",   "g": "linear-gradient(135deg,#080E18,#1A4A8A)", "ico": "💻"},
+      {"id": "mb8",  "lbl": "Naturaleza",   "g": "linear-gradient(180deg,#0A2010,#3A7040)", "ico": "🌿"},
+      {"id": "mb9",  "lbl": "Minimalismo",  "g": "linear-gradient(135deg,#F0F0EC,#D0D0CC)", "ico": "⬜"},
+      {"id": "mb10", "lbl": "Color",        "g": "linear-gradient(90deg,#FF3A3A,#FF8A00,#FFD800,#00D45A,#0080FF)", "ico": "🌈"},
+      {"id": "mb11", "lbl": "Textura",      "g": "repeating-linear-gradient(0deg,#6A5A4A,#6A5A4A 40px,#5A4A3A 40px,#5A4A3A 82px)", "ico": "🪨"},
+      {"id": "mb12", "lbl": "Espacio",      "g": "linear-gradient(160deg,#E8E0D4,#B8C8D8)", "ico": "🪟"}
+    ],
+    "premium": [
+      {"id": "mbp1",  "lbl": "Cyberpunk",       "g": "linear-gradient(135deg,#050210,#FF00A033,#00FFFF22)", "ico": "🔮"},
+      {"id": "mbp2",  "lbl": "Editorial",       "g": "linear-gradient(160deg,#1A0A20,#C0308A44)", "ico": "📸"},
+      {"id": "mbp3",  "lbl": "Foto análoga",    "g": "linear-gradient(120deg,#2A1A0A,#8A6A3A)", "ico": "📷"},
+      {"id": "mbp4",  "lbl": "Materiales",      "g": "linear-gradient(90deg,#8A7060,#6A5040)", "ico": "🪵"},
+      {"id": "mbp5",  "lbl": "Paleta",          "g": "linear-gradient(90deg,#FF3A3A,#FF7A00,#FFD000,#00C050,#0060FF,#8000FF)", "ico": "🌈"},
+      {"id": "mbp6",  "lbl": "Tipografía",      "g": "linear-gradient(135deg,#F5F0E8,#E0D8CC)", "ico": "🔤"},
+      {"id": "mbp7",  "lbl": "Detalle moda",    "g": "linear-gradient(135deg,#1A0A18,#C040A033)", "ico": "🧵"},
+      {"id": "mbp8",  "lbl": "Interior lujo",   "g": "linear-gradient(120deg,#D8C8B0,#B8A890)", "ico": "🛋"},
+      {"id": "mbp9",  "lbl": "Objeto diseño",   "g": "radial-gradient(circle at 50% 50%,#1A1A1A,#0A0A0A)", "ico": "⌚"},
+      {"id": "mbp10", "lbl": "Arte conceptual", "g": "radial-gradient(circle at 50%,#6E00FF33,#C040A022)", "ico": "🌀"}
+    ]
+  },
+  "palettes": [
+    {"name": "Neon Dark",     "colors": ["#0D0D1A", "#6E00FF", "#00FFFF", "#FF00A0", "#1A1A3A"]},
+    {"name": "Tierra",        "colors": ["#3B2A1A", "#8B6520", "#C4913A", "#E8C88A", "#F5EDD8"]},
+    {"name": "Urban Bold",    "colors": ["#1A0A05", "#8B3010", "#D85A30", "#F5A070", "#FFFFFF"]},
+    {"name": "Pastel Indie",  "colors": ["#1A1020", "#6A3A5A", "#C090A0", "#E8D0DA", "#F8F0F4"]},
+    {"name": "Tech Green",    "colors": ["#0A1208", "#1A3A10", "#3B8A20", "#90C060", "#F0F8E8"]},
+    {"name": "Monochrome",    "colors": ["#0A0A0A", "#333333", "#666666", "#AAAAAA", "#F0F0F0"]},
+    {"name": "Warm Sunset",   "colors": ["#1A0505", "#7A1A10", "#D44020", "#F08840", "#FFD080"]},
+    {"name": "Ocean Depth",   "colors": ["#020814", "#0A2040", "#1060A0", "#40A0D0", "#A0E0F8"]}
+  ]
+}
