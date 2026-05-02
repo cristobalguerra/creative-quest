@@ -1775,34 +1775,57 @@ function copyPin(){
   }).catch(function(){showToast('PIN: '+pin,'t-ok',5000);});
 }
 
+// Contraseña fija para que los aplicantes accedan a la prueba.
+// Solo personas con esta contraseña pueden iniciar la prueba.
+var STUDENT_ACCESS_PASS='CY8V';
+
+// Contraseña maestra del coordinador del CRGS. Define la cuando estés listo.
+var MASTER_PASS_EVAL=null; // ej. 'CRGS2026'
+
 function verifyPin(){
   var input=document.getElementById('pin-input');
   var pin=(input||{}).value||'';
   pin=pin.trim();
-  if(pin.length!==6||isNaN(Number(pin))){
-    _pinError('El PIN debe ser de 6 dígitos numéricos');return;
-  }
-  if(!window._fb){_pinError('Sin conexión. Verifica tu internet.');return;}
   var errEl=document.getElementById('pin-error');
-  if(errEl){errEl.style.display='block';errEl.style.color='var(--gh)';errEl.textContent='Verificando...';}
-  window._fb.onValue(window._fb.ref(window._fb.db,'sessions/'+pin),function(snap){
-    window._fb.off(window._fb.ref(window._fb.db,'sessions/'+pin));
-    var data=snap.val();
-    if(!data){_pinError('PIN incorrecto — solicítalo al coordinador.');return;}
-    if(Date.now()>data.expires){_pinError('Este PIN expiró — pide al coordinador uno nuevo.');return;}
-    // Grant access
+
+  // 1) Contraseña maestra fija de coordinador (si está definida)
+  if(MASTER_PASS_EVAL&&pin.toUpperCase()===MASTER_PASS_EVAL.toUpperCase()){
     G._evalAuthed=true;
-    var role=data.role||'evaluador';
-    G.roomRole=role;
+    G.roomRole='coordinador';
     document.getElementById('pin-gate').style.display='none';
     if(errEl)errEl.style.display='none';
     if(input)input.value='';
-    _injectEvalTabs(role);
-    showToast('Acceso verificado como '+(role==='coordinador'?'Coordinador':'Evaluador'),'t-ok');
-    setSalaTab(role);
-    // Cargar lista de entregables (admin only)
+    _injectEvalTabs('coordinador');
+    showToast('Acceso verificado · Coordinador CRGS','t-ok');
+    setSalaTab('evaluador');
     setTimeout(loadEntregables,200);
-  },{onlyOnce:true});
+    return;
+  }
+
+  // 2) PIN temporal de 6 dígitos generado por el coordinador
+  if(pin.length===6&&!isNaN(Number(pin))){
+    if(!window._fb){_pinError('Sin conexión. Verifica tu internet.');return;}
+    if(errEl){errEl.style.display='block';errEl.style.color='var(--gh)';errEl.textContent='Verificando...';}
+    window._fb.onValue(window._fb.ref(window._fb.db,'sessions/'+pin),function(snap){
+      window._fb.off(window._fb.ref(window._fb.db,'sessions/'+pin));
+      var data=snap.val();
+      if(!data){_pinError('Contraseña incorrecta');return;}
+      if(Date.now()>data.expires){_pinError('Este PIN expiró');return;}
+      G._evalAuthed=true;
+      var role=data.role||'evaluador';
+      G.roomRole=role;
+      document.getElementById('pin-gate').style.display='none';
+      if(errEl)errEl.style.display='none';
+      if(input)input.value='';
+      _injectEvalTabs(role);
+      showToast('Acceso verificado como '+(role==='coordinador'?'Coordinador':'Evaluador'),'t-ok');
+      setSalaTab(role);
+      setTimeout(loadEntregables,200);
+    },{onlyOnce:true});
+    return;
+  }
+
+  _pinError('Contraseña incorrecta');
 }
 
 function _pinError(msg){
@@ -2065,9 +2088,17 @@ function submissionSlug(id){
 }
 
 function submitIdentity(){
+  const pass=(document.getElementById('id-pass')?.value||'').trim();
   const nombre=(document.getElementById('id-nombre').value||'').trim();
   const prepa=(document.getElementById('id-prepa').value||'').trim();
   const estado=(document.getElementById('id-estado').value||'').trim();
+  if(!pass||pass.toUpperCase()!==STUDENT_ACCESS_PASS.toUpperCase()){
+    showToast('Contraseña incorrecta — pídela al evaluador','t-warn',3500);
+    const el=document.getElementById('id-pass');
+    if(el){el.style.borderColor='var(--co)';setTimeout(()=>{el.style.borderColor=''},1800);el.focus();}
+    if(typeof SFX!=='undefined')SFX.err();
+    return;
+  }
   if(!nombre||nombre.length<3){showToast('Escribe tu nombre completo','t-warn');return;}
   if(!prepa||prepa.length<3){showToast('Escribe tu preparatoria','t-warn');return;}
   if(!estado){showToast('Selecciona tu estado','t-warn');return;}

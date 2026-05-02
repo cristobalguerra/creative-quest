@@ -37,9 +37,12 @@
       <span>CREATIVE QUEST</span>
     </div>
     <h1 class="id-title">Antes de empezar</h1>
-    <p class="id-sub">Necesitamos tres datos para registrar tu entregable. Tu progreso se guarda automáticamente — si cierras la pestaña por accidente, podrás regresar.</p>
+    <p class="id-sub">Necesitamos cuatro datos para registrar tu entregable. Tu progreso se guarda automáticamente — si cierras la pestaña por accidente, podrás regresar.</p>
+    <label class="id-lbl">Contraseña de acceso</label>
+    <input id="id-pass" class="fi id-input" type="text" placeholder="Te la dio el evaluador del CRGS"
+      style="text-transform:uppercase;letter-spacing:.1em" autocomplete="off" autofocus>
     <label class="id-lbl">Nombre completo</label>
-    <input id="id-nombre" class="fi id-input" type="text" placeholder="Ej. Ana García López" autocomplete="name" autofocus>
+    <input id="id-nombre" class="fi id-input" type="text" placeholder="Ej. Ana García López" autocomplete="name">
     <label class="id-lbl">Preparatoria de origen</label>
     <input id="id-prepa" class="fi id-input" type="text" placeholder="Ej. Preparatoria UDEM Valle Alto" autocomplete="organization">
     <label class="id-lbl">Estado de origen</label>
@@ -225,14 +228,14 @@
     <div class="tool-block" style="max-width:460px;border-color:rgba(139,127,232,.35)">
       <div class="tool-lbl" style="color:var(--pu-l)">🔐 Acceso de evaluador</div>
       <div style="font-size:13px;color:var(--gh);margin-bottom:12px;line-height:1.6">
-        Ingresa el PIN de 6 dígitos que te compartió el coordinador.
+        Ingresa la contraseña que te compartió el coordinador del CRGS.
       </div>
       <div style="display:flex;gap:8px">
-        <input id="pin-input" type="password" maxlength="6" placeholder="● ● ● ● ● ●"
-          style="flex:1;font-size:22px;font-family:var(--fm);letter-spacing:.3em;text-align:center;margin:0;padding:12px"
-          class="fi" oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+        <input id="pin-input" type="password" maxlength="20" placeholder="Contraseña"
+          style="flex:1;font-size:18px;font-family:var(--fm);letter-spacing:.15em;text-align:center;margin:0;padding:12px;text-transform:uppercase"
+          class="fi"
           onkeydown="if(event.key==='Enter')verifyPin()">
-        <button class="btn btn-p" onclick="verifyPin()" style="width:auto;padding:0 20px;margin:0;font-size:14px">Verificar</button>
+        <button class="btn btn-p" onclick="verifyPin()" style="width:auto;padding:0 20px;margin:0;font-size:14px">Entrar</button>
       </div>
       <div id="pin-error" style="display:none;margin-top:8px;font-size:12px;color:var(--co-l)"></div>
       <button onclick="document.getElementById('pin-gate').style.display='none'"
