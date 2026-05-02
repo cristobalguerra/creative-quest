@@ -256,6 +256,9 @@ function aGo(i){
   if(cur)cur.textContent=String(i+1).padStart(2,'0');
   document.getElementById('sap').disabled=i===0;
   document.getElementById('san').disabled=i===4;
+  // Sincroniza el color del CTA con el arquetipo visible
+  const sel=document.getElementById('s-select');
+  if(sel&&ARCHS[i])sel.style.setProperty('--ax',ARCHS[i].hex);
 }
 
 function confirmArch(){
