@@ -1071,7 +1071,7 @@ function renderOP(){
     </div>
 
     <!-- RAZONAMIENTO CREATIVO — justificaciones de decisiones -->
-    ${Object.values(G.decJust||{}).some(arr=>arr&&arr.some(j=>j))?`
+    ${Object.values(G.decJust||{}).some(arr=>Array.isArray(arr)&&arr.some(j=>j))?`
     <div style="border-top:.5px solid rgba(255,255,255,.08);padding:10px 14px">
       <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--gh);font-weight:700;font-family:var(--fh);margin-bottom:8px">Razonamiento creativo — por qué elegí cada camino</div>
       ${MISSIONS.map((m,mi)=>{
